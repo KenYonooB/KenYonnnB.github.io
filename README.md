@@ -35,9 +35,9 @@ bundle exec jekyll serve
 
 公开内容聚焦技术主题、复现步骤与验证结果。发布前请检查正文、截图和日志中的身份信息与内部环境标识。
 
-## Cloudflare Pages
+## Cloudflare Workers
 
-通过 Git 导入仓库时，生产分支选 `main`，构建命令填 `bundle exec jekyll build`，构建输出目录填 `_site`。使用自定义域名时，可在 `_config.yml` 中设置公开站点地址，并将 `baseurl` 设为空字符串。[Cloudflare Pages 的 Jekyll 部署文档](https://developers.cloudflare.com/pages/framework-guides/deploy-a-jekyll-site/)
+将生产分支设为 `main`，根目录设为 `/`。构建命令使用 `JEKYLL_ENV=production bundle exec jekyll build`，部署命令使用 `npx wrangler deploy`。`wrangler.toml` 将生成的 `_site/` 发布为静态资源。[Cloudflare Workers 静态资源文档](https://developers.cloudflare.com/workers/static-assets/)
 
 ## 主题许可
 
