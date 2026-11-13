@@ -1,40 +1,31 @@
 # ========================================================================================
-# Hydejack Resume Site - AI Infra 方向
-# 部署方式: GitHub Actions -> GitHub Pages
+# AI Infra 学习档案
 # ========================================================================================
 
-# 站点 URL —— 部署后替换 <your-username> 为你的 GitHub 用户名
-url:                   https://kenyonooob.github.io
+# 部署时可填写公开站点地址
+url:                   ''
 baseurl:               ''
 
 # 通用设置
 # ---------------------------------------------------------------------------------------
 lang:                  zh-cn
-title:                 "<你的姓名> | AI Platform Engineer"
-description:           >
-  AI Infra 方向求职简历 —— AI Platform Development Engineer，
-  专注操作系统、C/C++ 与机器学习基础设施。
-tagline:               AI Platform Development Engineer
+title:                 AI Infra 学习档案
+description:           AI Infra 学习路线、技术笔记与可复现实验。
+tagline:               系统编程与性能分析
 keywords:              [AI Infra, AI Platform, C/C++, Operating System, Machine Learning]
 
 # 站点 logo（可选，放一张正方形图片到 assets/img/logo.png）
 # logo:                  /assets/img/logo.png
 
-# 作者信息（需与 _data/authors.yml 中的第一条一致）
-author:
-  name:                <你的姓名>
-  email:               <your-email@example.com>
-  # twitter:             <username>
-
 # 侧边栏导航菜单
 menu:
-  - title:             简历
+  - title:             技术概览
     url:               /resume/
-  - title:             关于
+  - title:             关于本站
     url:               /about/
 
 # 页脚版权信息
-copyright:             "© 2024 <你的姓名>. All rights reserved."
+copyright:             "© AI Infra 学习档案"
 
 # 文章永久链接格式
 permalink:             /:categories/:year-:month-:day-:title/

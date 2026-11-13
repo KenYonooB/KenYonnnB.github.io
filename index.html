@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>KenYonooB 的学习档案</title>
-<meta name="description" content="KenYonooB 的 AI Infra 学习档案，包含学习路线、技术笔记、动手实验与个人简历。" />
+<title>AI Infra 学习档案</title>
+<meta name="description" content="AI Infra 学习路线、技术笔记与可复现实验。" />
 <style>
   /* ===================== 1. 设计令牌 ===================== */
   :root{
@@ -434,7 +434,6 @@
     .nav .logo .mark{width:24px;height:24px;font-size:11px;border-radius:7px}
     .nav .links{display:none}
     .burger{display:flex}
-    .icon-btn.gh{display:none}
     .body{min-height:0}
     .side{
       position:fixed; inset:0 auto 0 0; z-index:80; width:min(286px, 85vw); transform:translateX(-100%);
@@ -470,7 +469,6 @@
 <!-- ============ 内联图标 sprite（零外部请求） ============ -->
 <svg style="display:none" aria-hidden="true">
   <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></symbol>
-  <symbol id="ic-github" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.93.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></symbol>
   <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
   <symbol id="ic-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
   <symbol id="ic-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
@@ -480,7 +478,6 @@
   <symbol id="ic-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
   <symbol id="ic-tag" viewBox="0 0 24 24"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0l-7.2-7.2A2 2 0 0 1 3 12V4.8A1.8 1.8 0 0 1 4.8 3H12a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.6z"/><circle cx="7.5" cy="7.5" r="1.2"/></symbol>
   <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
-  <symbol id="ic-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6 8.5-6"/></symbol>
   <symbol id="ic-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
   <symbol id="ic-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.5L4.6 18a2 2 0 0 0 1.7 3h11.4a2 2 0 0 0 1.7-3L14 9.5V3"/><path d="M7.4 14h9.2"/></symbol>
   <symbol id="ic-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
@@ -501,14 +498,13 @@
     <div class="demo-notice" id="demoNotice" hidden>示例预览 · 笔记、实验数据与进度仅用于演示。 <a href="./#/">返回学习档案</a></div>
     <!-- 顶部导航 -->
     <nav class="nav">
-      <a class="logo clickable" href="#/" data-go="home"><span class="mark">K</span>学习档案</a>
+      <a class="logo clickable" href="#/" data-go="home"><span class="mark">AI</span>学习档案</a>
       <div class="links" id="navLinks"></div>
       <div class="right">
         <button class="search clickable" id="searchBtn" aria-label="站内搜索">
           <svg class="ic sm"><use href="#ic-search"/></svg><span class="search-label">站内搜索…</span>
           <span class="kbd">⌘K</span>
         </button>
-        <a class="icon-btn gh clickable" href="https://github.com/KenYonooB" aria-label="GitHub"><svg class="ic"><use href="#ic-github"/></svg></a>
         <button class="icon-btn burger" id="burger" aria-label="打开导航" aria-controls="side" aria-expanded="false"><svg class="ic"><use href="#ic-menu"/></svg></button>
       </div>
     </nav>
@@ -517,14 +513,13 @@
       <aside class="side" id="side"></aside>
       <div class="scrim" id="scrim"></div>
       <main class="main" id="main">
-        <noscript>请启用 JavaScript 以浏览学习档案。<a href="./resume/">查看简历</a> · <a href="./about/">关于我</a></noscript>
+        <noscript>请启用 JavaScript 以浏览学习档案。<a href="./resume/">查看技术概览</a> · <a href="./about/">关于本站</a></noscript>
       </main>
     </div>
 
     <footer class="foot">
-      <a class="fi" href="https://github.com/KenYonooB"><svg class="ic sm"><use href="#ic-github"/></svg>GitHub</a>
-      <a class="fi" href="./resume/"><svg class="ic sm"><use href="#ic-file"/></svg>简历</a>
-      <a class="fi" href="./about/"><svg class="ic sm"><use href="#ic-info"/></svg>关于我</a>
+      <a class="fi" href="./resume/"><svg class="ic sm"><use href="#ic-file"/></svg>技术概览</a>
+      <a class="fi" href="./about/"><svg class="ic sm"><use href="#ic-info"/></svg>关于本站</a>
       <a class="fi" id="demoLink" href="./?view=demo#/">查看示例</a>
     </footer>
   </div>
@@ -579,7 +574,7 @@ const STAGES = [
              '解释清楚 warp divergence 的产生条件，并写一个能触发它的最小 kernel'],
    links:['note'], labLinks:['lab'], current:true},
   {id:'ml', name:'阶段 5 · 机器学习', status:'todo',
-   goal:'够用即可，目标岗位重在系统而非算法。',
+   goal:'理解模型训练和推理过程，练习定位性能瓶颈。',
    criteria:['不依赖任何框架，手写一个含反向传播的全连接网络，在 MNIST 上准确率 ≥95%',
              '解释清反向传播的矩阵维度推导，能手推一层的梯度',
              '能说出一个训练过程中的性能瓶颈在哪，并给出优化思路'],
@@ -791,17 +786,14 @@ const REAL = {
        why:'时间线文案最容易写成流水账，然后断更。把信息密度压到三个字段，「更新」这件事才有可执行性。'},
   /* 真实 about.md */
   about:{
-    lead:'我学 C/CUDA 的过程里有大量半成品理解：一个概念第一遍肯定没懂透，写下的结论有几条后来被自己推翻。把这些东西藏起来，简历上也只会多一行「熟悉」，不会有第二收获。',
+    lead:'本站记录 C/C++、CUDA 和 AI 基础设施相关的学习笔记与动手实验。笔记保留问题、验证过程和后续修订。',
     principles:[
       ['记录当时的理解，不做事后美化。','如果一周后发现自己错了，就在原文上追加「修正」，而不是悄悄改掉。'],
       ['每一条性能结论都必须有测量方法和原始输出。','没有数据支撑的观点，我会明确标注为「推测」。'],
       ['区分「测过」和「没测过」。','我不试图让人觉得我什么都懂，但我想让「哪部分是实测的」一目了然。'],
       ['错了要看得见。','已修正的结论会在页面上留痕——这比「一直正确」更能说明我在真的学。']
     ],
-    quote:'这四条不是道德姿态，是务实选择：对 AI Infra 这个方向，「能被验证」本身就是最贵的品质。一个候选人说他优化了 3 倍，和一个候选人贴出 perf 原始输出说「这就是我测出来的 3 倍，方法在这，你可以复现」——后者含金量高得多。',
-    bg:[['入门语言','C'],
-        ['目标岗位','AI 平台开发工程师 / AI Infra（C/C++ 系统 + 高性能计算）'],
-        ['学习主线','C → 计算机基础 → 数据结构算法 → C++/并行/CUDA → ML → 平台工程']],
+    quote:'性能结论附上测试环境、测量方法、对照数据和原始输出，便于复现与比较。',
     workLead:'这个分支用于记录实际遇到的系统问题、排查过程与可复用的方法。'
   }
 };
@@ -863,7 +855,7 @@ function applyRoute(r, scroll){
   closeSearch();
   setDrawer(false);
   render();
-  document.title = pageTitle() + ' · KenYonooB 的学习档案';
+  document.title = pageTitle() + ' · AI Infra 学习档案';
   if(scroll !== false) window.scrollTo({top:0, behavior:'auto'});
 }
 function go(page, params){
@@ -878,7 +870,7 @@ window.addEventListener('hashchange', ()=>{
 });
 /* 页面标题跟随路由（真实站点行为，便于区分浏览器标签页） */
 const TITLE = {home:'首页', roadmap:'Roadmap · 六阶段学习路线', notes:'Notes · 笔记档案',
-               labs:'Labs · 动手实验', now:'Now · 现在在做什么', about:'About · 关于我', '404':'404'};
+               labs:'Labs · 动手实验', now:'Now · 现在在做什么', about:'About · 关于本站', '404':'404'};
 function pageTitle(){
   if(route.page === 'note'){
     const n = SRC === 'demo' && NOTES.find(x=>x.slug===route.params.slug);
@@ -929,7 +921,7 @@ function renderSide(){
     <a class="clickable${cur('about')}" data-go="about">${ic('info')}About</a>
     <a class="clickable${cur('notes')}" data-go="notes">${ic('doc')}Notes</a>
     <a class="clickable${cur('labs')}" data-go="labs">${ic('flask')}Labs</a>
-    <a href="./resume/">${ic('file')}简历</a>
+    <a href="./resume/">${ic('file')}技术概览</a>
     <div class="grp">笔记档案</div>
     ${branchHtml}
     ${real ? '' : `<div class="grp">示例实验</div>${labHtml}`}
@@ -968,14 +960,14 @@ function pageHome(){
     : NOW.focus;
   const typeIcon = {doc:'doc', flask:'flask', note:'doc', lab:'flask'};
   return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：这是 P-01 首页的高保真稿。左侧是身份卡（15 秒自证区），右侧是最近更新。三个按钮、导航、最近更新条目都可以点。</div></div>
+  <div class="note-strip">${ic('info','sm')}<div>说明：这是 P-01 首页的高保真稿。左侧是学习方向与入口，右侧是示例更新。</div></div>
   <div class="hero">
     <div class="left">
       <div>
         <span class="eyebrow">${ic('target','sm')}AI 平台开发 / AI Infra</span>
       </div>
-      <h1 class="name">KenYonooB</h1>
-      <div class="direction">从零打地基学 AI Infra 的公开技术档案</div>
+      <h1 class="name">AI Infra 学习档案</h1>
+      <div class="direction">系统编程、并行计算与 AI 基础设施</div>
       <div class="focus">${ic('target')}<div>${real?focusText:'当前聚焦：'+focusText}</div></div>
       <div class="stat-row">
         <div class="stat"><div class="v">${st.notes}</div><div class="l">篇笔记</div></div>
@@ -988,9 +980,8 @@ function pageHome(){
         <a class="btn ghost clickable" data-go="labs">${ic('flask')}Labs</a>
       </div>
       <div class="contact">
-        <a class="link" href="https://github.com/KenYonooB">${ic('github','sm')}GitHub</a>
-        <a class="link" href="./resume/">${ic('file','sm')}查看简历</a>
-        <a class="link" href="./about/">${ic('info','sm')}关于我</a>
+        <a class="link" href="./resume/">${ic('file','sm')}查看技术概览</a>
+        <a class="link" href="./about/">${ic('info','sm')}关于本站</a>
       </div>
     </div>
     <div class="right">
@@ -1161,7 +1152,6 @@ function pageNote(){
     <div class="bar" style="flex-wrap:wrap;gap:14px;font-size:var(--fs-sm)">
       ${n.lab?`<a class="link clickable" data-go="lab" data-id="${n.lab}">${ic('flask')}去看关联 Lab ${n.lab}${ic('arrow-r','ic-arrow')}</a>`:`<span style="color:var(--ink-3)">本篇没有关联 Lab（不计入 UE 的 B 条件）</span>`}
       <a class="link clickable" data-go="notes" data-cat="${STAGE_KEY[n.stage]}">返回所属主题：${n.topic}</a>
-      <span style="margin-left:auto;color:var(--ink-3);font-size:var(--fs-xs)">联系：GitHub · 邮箱 · CV</span>
     </div>
   </div>
   <div class="card plain" style="display:flex;justify-content:space-between;gap:12px;font-size:var(--fs-sm)">
@@ -1372,7 +1362,7 @@ function pageAbout(){
   return `
   <div class="note-strip">${ic('info','sm')}<div>说明：P-09 About 页，内容<b>逐条取自 learning-notes/src/content/docs/about.md</b>。这是真实站点内容，不是示例数据——两种数据源下都显示这一页。</div></div>
   <div class="crumb">${ic('chev-r')}门户<span style="color:var(--ink-4)">/</span>About</div>
-  <h1 class="page">About · 关于我</h1>
+  <h1 class="page">About · 关于本站</h1>
   <p class="lead">${a.lead}</p>
   <div class="card hl">
     <div class="lbl-c" style="margin-bottom:9px">这个站的四条原则</div>
@@ -1386,13 +1376,6 @@ function pageAbout(){
     <div class="lbl-c" style="margin-bottom:6px">为什么这么做</div>
     <div style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.75;border-left:3px solid var(--accent);padding-left:13px">${a.quote}</div>
   </div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <tbody>
-        ${a.bg.map(r=>`<tr><td style="width:132px;color:var(--ink-3);font-size:var(--fs-xs);white-space:nowrap">${r[0]}</td><td>${r[1]}</td></tr>`).join('')}
-      </tbody>
-    </table>
-  </div>
   <div class="card">
     <div class="lbl-c" style="margin-bottom:6px">关于「工作复盘」这一类笔记</div>
     <div style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.7">${a.workLead}</div>
@@ -1400,9 +1383,8 @@ function pageAbout(){
     ${SRC==='real'?`<div style="margin-top:11px"><a class="link clickable" data-go="notes" data-cat="work">${ic('arrow-r','ic-arrow')}去看「工作复盘」分支</a></div>`:''}
   </div>
   <div class="card plain">
-    <a class="link" href="https://github.com/KenYonooB">${ic('github','sm')}GitHub</a> ·
-    <a class="link" href="./resume/">${ic('file','sm')}简历</a> ·
-    <a class="link" href="./about/">${ic('info','sm')}个人简介</a>
+    <a class="link" href="./resume/">${ic('file','sm')}技术概览</a> ·
+    <a class="link" href="./about/">${ic('info','sm')}站点说明</a>
   </div>`;
 }
 
@@ -1482,7 +1464,7 @@ const INDEX = [
   ...(SRC === 'demo' ? LABS : []).map(l=>({type:'lab', t:l.id+' '+l.title, d:'实验 · '+l.topic, go:'lab', id:l.id, icon:'flask'})),
   ...STAGES.map(s=>({type:'路线', t:s.name, d:SRC === 'demo' ? '路线节点 · '+STAT[s.status] : '路线节点', go:'roadmap', icon:'map'})),
   ...(SRC === 'real' ? REAL.branches : []).map(b=>({type:'主题', t:b.name, d:b.desc, go:'notes', cat:b.id, icon:'doc'})),
-  {type:'页面', t:'About · 关于我', d:'门户', go:'about', icon:'info'},
+  {type:'页面', t:'About · 关于本站', d:'门户', go:'about', icon:'info'},
   {type:'页面', t:'Now · 现在在做什么', d:'门户', go:'now', icon:'target'},
   {type:'页面', t:'Roadmap · 六阶段学习路线', d:'门户', go:'roadmap', icon:'map'},
   {type:'页面', t:'Labs · 动手实验', d:'门户', go:'labs', icon:'flask'},
