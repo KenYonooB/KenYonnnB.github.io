@@ -14,6 +14,8 @@
 | 技术概览 | `/resume/` | 技术主题与实践方向 |
 | 关于本站 | `/about/` | 站点用途与内容编写原则 |
 
+首页的二进制鲨鱼背景使用 Canvas 绘制，支持暂停与系统的减少动态效果设置。视觉参考 [dsh-ascii-binary](https://github.com/zhinuorao-ship-it/dsh-ascii-binary)。
+
 首页提供站内搜索。页脚的「查看示例」可打开演示内容，示例页会明确标注实验数据和进度的用途。
 
 ## 本地预览
