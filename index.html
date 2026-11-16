@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>AI Infra 学习档案</title>
 <meta name="description" content="AI Infra 学习路线、技术笔记与可复现实验。" />
 <style>
@@ -11,10 +11,13 @@
     color-scheme: light dark;
     /* 中性色阶 */
     --bg:#FFFFFF; --bg-soft:#F7F8FB; --bg-sunken:#F1F3F7; --surface:#FFFFFF;
-    --ink:#151B26; --ink-2:#48525F; --ink-3:#77818F; --ink-4:#A3ABB7;
+    --ink:#151B26; --ink-2:#48525F; --ink-3:#596677; --ink-4:#657286;
     --line:#E5E9F0; --line-2:#D4DAE4;
+    --glass-shell:rgba(241,247,255,.92); --glass-panel:rgba(255,255,255,.53);
+    --glass-chrome:rgba(246,250,255,.66); --glass-overlay:rgba(247,250,255,.94);
+    --glass-rim:rgba(255,255,255,.52);
     /* 品牌主色 */
-    --accent:#2B5CE6; --accent-hover:#1E48C4; --accent-ink:#1B3FA8;
+    --accent:#2B5CE6; --on-accent:#fff; --accent-hover:#1E48C4; --accent-ink:#1B3FA8;
     --accent-soft:#EDF2FF; --accent-line:#C9D8FB;
     /* 语义色 */
     --ok-bg:#E7F5EC; --ok-line:#B4DCC2; --ok-ink:#1C6B3C; --ok-dot:#18A34A;
@@ -41,9 +44,12 @@
   @media (prefers-color-scheme: dark){
     :root{
       --bg:#0E1219; --bg-soft:#121721; --bg-sunken:#0A0E14; --surface:#151B26;
-      --ink:#E7EBF3; --ink-2:#A6B0C0; --ink-3:#7C8698; --ink-4:#5C6675;
+      --ink:#E7EBF3; --ink-2:#A6B0C0; --ink-3:#A2B0C3; --ink-4:#8B9AB0;
       --line:#242C39; --line-2:#313B4B;
-      --accent:#7C9BFF; --accent-hover:#93AEFF; --accent-ink:#B9C8FF;
+      --glass-shell:rgba(17,25,37,.83); --glass-panel:rgba(130,161,196,.08);
+      --glass-chrome:rgba(134,164,198,.08); --glass-overlay:rgba(20,29,43,.94);
+      --glass-rim:rgba(158,187,221,.18);
+      --accent:#7C9BFF; --on-accent:#10182A; --accent-hover:#93AEFF; --accent-ink:#B9C8FF;
       --accent-soft:#182136; --accent-line:#2C3C63;
       --ok-bg:#12261A; --ok-line:#2A5638; --ok-ink:#7FD49B; --ok-dot:#35C46B;
       --do-bg:#182136; --do-line:#2C3C63; --do-ink:#A9C0FF; --do-dot:#7C9BFF;
@@ -60,7 +66,10 @@
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
-    background:#0a0d12; color:var(--ink); font-family:var(--sans);
+    background:#0a0d12;
+    background-image:radial-gradient(ellipse at 14% 8%, #233852, transparent 55%),
+      radial-gradient(ellipse at 95% 62%, #18353b, transparent 48%);
+    background-attachment:fixed; color:var(--ink); font-family:var(--sans);
     font-size:var(--fs-base); line-height:1.75; -webkit-font-smoothing:antialiased;
     transition:background .2s var(--ease);
   }
@@ -80,25 +89,25 @@
 
   /* ===================== 4. 画布 ===================== */
   .ocean-backdrop{
-    position:fixed; inset:0; width:100%; height:100%; opacity:.56; pointer-events:none;
+    position:fixed; inset:0; width:100%; height:100%; opacity:.76; pointer-events:none;
   }
   .stage{position:relative; padding:28px 18px 80px; display:flex; justify-content:center}
   .ocean-toggle[hidden], .ocean-toggle:not(.is-paused) .ocean-play,
   .ocean-toggle.is-paused .ocean-pause{display:none}
   .screen{
-    width:1280px; max-width:100%; background:var(--bg); border:1px solid var(--line);
+    width:1280px; min-width:0; max-width:100%; background:var(--glass-shell); border:1px solid var(--glass-rim);
     border-radius:var(--r-lg); overflow:hidden; display:flex; flex-direction:column;
     box-shadow:var(--sh-3);
   }
   /* ===================== 5. 顶部导航 ===================== */
   .nav{
     display:flex; align-items:center; justify-content:space-between; gap:20px;
-    padding:0 32px; height:66px; background:var(--bg);
+    padding:0 32px; height:66px;
     border-bottom:1px solid var(--line); flex:none;
   }
   .nav .logo{white-space:nowrap; display:flex; align-items:center; gap:10px; font-weight:700; font-size:var(--fs-lg); letter-spacing:-.015em}
   .nav .logo .mark{
-    width:28px;height:28px;border-radius:8px;background:var(--accent);color:#fff;
+    width:28px;height:28px;border-radius:8px;background:var(--accent);color:var(--on-accent);
     display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
     font-family:var(--mono); letter-spacing:0;
   }
@@ -133,7 +142,7 @@
   /* ===================== 6. 侧栏 ===================== */
   .body{display:flex; flex:1; min-height:780px}
   .side{
-    width:256px; flex:none; padding:22px 14px 22px 18px; background:var(--bg-soft);
+    width:256px; flex:none; padding:22px 14px 22px 18px;
     border-right:1px solid var(--line); font-size:var(--fs-sm); color:var(--ink-2);
   }
   .side .grp{
@@ -198,7 +207,7 @@
     transition:background .15s var(--ease), border-color .15s var(--ease), transform .1s var(--ease);
   }
   .btn:active{transform:translateY(1px)}
-  .btn.primary{background:var(--accent); color:#fff}
+  .btn.primary{background:var(--accent); color:var(--on-accent)}
   .btn.primary:hover{background:var(--accent-hover); text-decoration:none}
   .btn.ghost{background:var(--bg); color:var(--ink); border-color:var(--line-2)}
   .btn.ghost:hover{background:var(--bg-soft); border-color:var(--ink-4); text-decoration:none}
@@ -212,7 +221,7 @@
   .link:hover .ic-arrow{transform:translateX(3px)}
 
   .foot{
-    margin-top:auto; height:62px; flex:none; background:var(--bg-soft);
+    margin-top:auto; height:62px; flex:none;
     border-top:1px solid var(--line); display:flex; align-items:center; gap:16px;
     padding:0 32px; font-size:var(--fs-sm); color:var(--ink-3); flex-wrap:wrap;
   }
@@ -222,6 +231,7 @@
   /* ===================== 8. 首页 ===================== */
   .hero{display:flex; gap:52px; padding:6px 0 0}
   .hero .left{flex:3; min-width:0; display:flex; flex-direction:column; gap:17px}
+  .hero-intro, .hero-updates{display:flex; flex-direction:column; gap:14px; min-width:0}
   .eyebrow{
     display:inline-flex; align-items:center; gap:7px; font-size:var(--fs-xs); font-weight:600;
     color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--accent-line);
@@ -237,7 +247,7 @@
   .focus .ic{margin-top:4px; color:var(--accent)}
   .stat-row{display:flex; gap:12px}
   .stat{
-    flex:1; background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+    flex:1; min-width:0; background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
     padding:14px 16px; box-shadow:var(--sh-1);
   }
   .stat .v{font-size:var(--fs-2xl); font-weight:700; line-height:1.1; font-family:var(--mono); letter-spacing:-.02em}
@@ -251,8 +261,9 @@
   .hero .right{flex:2; min-width:0; display:flex; flex-direction:column; gap:14px}
   .ocean-panel{
     position:relative; isolation:isolate; min-height:236px; overflow:hidden;
-    border:1px solid #202a37; border-radius:var(--r-lg);
-    background:radial-gradient(ellipse at 52% 40%, #121b28, #0a0d12 76%);
+    border:1px solid rgba(152,183,214,.36); border-radius:var(--r-lg);
+    box-shadow:inset 0 1px 0 rgba(215,235,255,.16), 0 10px 28px rgba(7,15,27,.15);
+    background:radial-gradient(ellipse at 52% 40%, rgba(23,43,62,.88), rgba(9,15,25,.96) 77%);
   }
   .ocean-preview{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
   @media print{
@@ -310,7 +321,7 @@
     font-size:var(--fs-xs); font-weight:700; font-family:var(--mono);
     background:var(--bg-sunken); color:var(--ink-3); margin-top:2px;
   }
-  .seg.req .no{background:var(--accent); color:#fff}
+  .seg.req .no{background:var(--accent); color:var(--on-accent)}
   .seg .bd{flex:1; min-width:0}
   .seg .h{display:flex; align-items:center; gap:8px; margin-bottom:3px; flex-wrap:wrap}
   .seg .h b{font-size:var(--fs-base); color:var(--ink)}
@@ -360,7 +371,7 @@
     width:15px;height:15px;border-radius:4px;border:1.5px solid var(--line-2);flex:none;
     display:flex;align-items:center;justify-content:center;background:var(--surface);
   }
-  .chk.on .box{background:var(--accent); border-color:var(--accent); color:#fff}
+  .chk.on .box{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
   .warn{
     background:var(--wn-bg); border:1px solid var(--wn-line); color:var(--wn-ink);
     border-radius:var(--r); padding:12px 15px; font-size:var(--fs-sm);
@@ -422,6 +433,22 @@
   }
   .ov-foot span{display:inline-flex; align-items:center; gap:5px}
 
+  .nav, .side, .foot{background:var(--glass-chrome)}
+  .main .card:not(.hl), .stat, .focus, .contact, .recent, .empty, .tbl-wrap,
+  .btn.ghost:not(:hover){background:var(--glass-panel)}
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))){
+    .ov-box{
+      background:var(--glass-overlay);
+      -webkit-backdrop-filter:blur(12px);
+      backdrop-filter:blur(12px);
+    }
+  }
+  @media print{
+    .screen, .main .card:not(.hl), .stat, .focus, .contact, .recent, .empty, .tbl-wrap{
+      background:var(--bg);
+    }
+  }
+
   /* ===================== 13. 示例提示 / 动效 ===================== */
   .note-strip{
     display:flex; gap:10px; align-items:flex-start; background:var(--bg-soft);
@@ -436,46 +463,82 @@
   @keyframes fade{from{opacity:.35; transform:translateY(3px)}to{opacity:1; transform:none}}
   @media (prefers-reduced-motion: reduce){ .fade{animation:none} }
   @media (max-width: 900px){
-    .stage{padding:10px 8px}
-    .screen{min-height:calc(100dvh - 20px)}
-    .ocean-panel{min-height:210px}
-    .nav .right{gap:8px}
-    .search{width:36px; height:36px; padding:0; justify-content:center}
-    .search .search-label, .search .kbd{display:none}
-    .icon-btn{width:36px; height:36px}
-    .ov-list{max-height:min(392px, 55dvh)}
-    .nav{height:56px; padding:0 16px; gap:8px}
-    .nav .logo{font-size:var(--fs-md)}
-    .nav .logo .mark{width:24px;height:24px;font-size:11px;border-radius:7px}
-    .nav .links{display:none}
+    .stage{
+      padding:max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right))
+        max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+    }
+    .screen{min-height:calc(100dvh - 16px)}
+    .nav{height:58px; padding:0 12px; gap:6px; background:var(--glass-overlay)}
+    .nav .right{gap:6px}
+    .nav .logo{font-size:var(--fs-md); gap:7px}
+    .nav .logo .mark{width:26px;height:26px;font-size:11px;border-radius:7px}
+    .nav .links, .search .search-label, .search .kbd{display:none}
+    .search, .icon-btn{width:44px; height:44px; padding:0; justify-content:center}
     .burger{display:flex}
     .body{min-height:0}
     .side{
-      position:fixed; inset:0 auto 0 0; z-index:80; width:min(286px, 85vw); transform:translateX(-100%);
-      transition:transform .22s var(--ease); box-shadow:var(--sh-3); overflow:auto;
+      position:fixed; inset:0 auto 0 0; z-index:80; width:min(316px, 88vw);
+      padding:max(18px, env(safe-area-inset-top)) 14px
+        max(18px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      background:var(--glass-overlay); transform:translateX(-100%); visibility:hidden;
+      transition:transform .22s var(--ease), visibility 0s linear .22s;
+      box-shadow:var(--sh-3); overflow:auto; overscroll-behavior:contain;
     }
-    body.drawer-open .side{transform:translateX(0)}
+    .side a{min-height:44px}
+    body.drawer-open .side{transform:translateX(0); visibility:visible; transition-delay:0s}
     body.drawer-open .scrim{display:block; position:fixed; inset:0; background:rgba(8,12,20,.42); z-index:70}
-    .main{padding:20px 18px 30px; gap:13px}
+    .main{padding:16px clamp(12px, 4vw, 24px) 24px; gap:12px}
+    .crumb{flex-wrap:wrap; overflow-wrap:anywhere}
+    .card{padding:14px}
     h1.page{font-size:var(--fs-xl)}
-    .btn{width:100%; min-width:0; height:46px}
-    .btns{flex-direction:column; gap:10px}
-    .foot{height:auto; padding:14px 18px; gap:10px}
-    .hero{flex-direction:column; gap:26px}
-    .hero .left{width:auto; gap:14px}
-    .name{font-size:36px}
-    .direction{font-size:var(--fs-md)}
-    .focus{font-size:var(--fs-base)}
-    .stat-row{gap:8px}
-    .stat{padding:11px 12px}
-    .stat .v{font-size:var(--fs-xl)}
-    .contact{font-size:var(--fs-xs)}
+    .btn{width:100%; min-width:0; min-height:44px}
+    .btns{flex-direction:column; gap:8px}
+    .foot{height:auto; padding:8px 14px; gap:4px 14px}
+    .foot .fi{min-height:44px}
+    .hero{
+      display:grid; grid-template-columns:minmax(0, 1fr); gap:12px;
+      width:100%; max-width:38rem; margin-inline:auto; padding:0;
+    }
+    .hero .left, .hero .right{display:contents}
+    .hero-intro{gap:7px}
+    .name{font-size:clamp(27px, 7.6vw, 40px); line-height:1.13}
+    .direction{font-size:clamp(14px, 3.8vw, 17px)}
+    .hero .btns{
+      order:1; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px;
+    }
+    .hero .btn{padding:0 3px; gap:4px; font-size:clamp(12px, 3.5vw, 15px)}
+    .hero .btn .ic-arrow{display:none}
+    .ocean-panel{order:2; min-height:clamp(144px, 43vw, 250px)}
+    .focus{order:3; padding:8px 10px; font-size:var(--fs-sm); line-height:1.6}
+    .stat-row{order:4; gap:6px}
+    .stat{padding:8px}
+    .stat .v{font-size:var(--fs-lg)}
+    .stat .l{font-size:11px}
+    .contact{order:5; padding:0 9px; gap:4px 12px; font-size:var(--fs-xs)}
+    .contact .link{min-height:44px}
+    .hero-updates{order:6; gap:10px}
     .nf .big{font-size:72px}
+    .overlay{padding:max(12px, env(safe-area-inset-top)) 10px 12px; overflow:auto}
+    .ov-list{max-height:min(392px, 54dvh); overscroll-behavior:contain}
+    @supports (overflow:clip){
+      .screen{overflow:clip}
+      .nav{position:sticky; top:env(safe-area-inset-top); z-index:20}
+    }
+    @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))){
+      .nav{
+        -webkit-backdrop-filter:blur(10px);
+        backdrop-filter:blur(10px);
+      }
+    }
   }
   @media (max-width: 360px){
+    .nav{padding-inline:9px}
     .nav .logo{font-size:var(--fs-sm)}
-    .nav .logo .mark{display:none}
-    .stat{padding:9px 7px}
+    .nav .right{gap:4px}
+    .hero .btn .ic{width:13px; height:13px}
+  }
+  @media (max-width: 900px) and (prefers-reduced-motion: reduce){
+    .side{transition:none}
   }
 </style>
 <script defer src="./assets/js/binary-ocean.js"></script>
@@ -984,11 +1047,11 @@ function pageHome(){
   <div class="note-strip">${ic('info','sm')}<div>说明：这是 P-01 首页的高保真稿。左侧是学习方向与入口，右侧是示例更新。</div></div>
   <div class="hero">
     <div class="left">
-      <div>
+      <div class="hero-intro">
         <span class="eyebrow">${ic('target','sm')}AI 平台开发 / AI Infra</span>
+        <h1 class="name">AI Infra 学习档案</h1>
+        <div class="direction">系统编程、并行计算与 AI 基础设施</div>
       </div>
-      <h1 class="name">AI Infra 学习档案</h1>
-      <div class="direction">系统编程、并行计算与 AI 基础设施</div>
       <div class="focus">${ic('target')}<div>${real?focusText:'当前聚焦：'+focusText}</div></div>
       <div class="stat-row">
         <div class="stat"><div class="v">${st.notes}</div><div class="l">篇笔记</div></div>
@@ -1007,15 +1070,17 @@ function pageHome(){
     </div>
     <div class="right">
       <div class="ocean-panel"><canvas class="ocean-preview" aria-hidden="true"></canvas></div>
-      <div class="sec-h">${ic('clock')}最近更新</div>
-      ${rec.length
-        ? `<div class="recent">${rec.map(r=>`<a class="row clickable" data-go="${r[3]}" data-slug="${r[3]==='note'?r[4]:''}" data-id="${r[3]==='lab'?r[4]:''}">
-          <span class="ti">${ic(typeIcon[r[5]]||'doc','sm')}</span>
-          <span class="tx"><span class="k">${r[0]}</span>${r[1]}</span>
-          <span class="dt">${r[2]}</span>
-          ${ic('arrow-r','ic-arrow')}
-        </a>`).join('')}</div>`
-        : `<div class="empty">${ic('inbox')}<div>暂无已发布的笔记和实验。<br><a class="link" data-go="roadmap">查看学习路线 ${ic('arrow-r','sm')}</a></div></div>`}
+      <div class="hero-updates">
+        <div class="sec-h">${ic('clock')}最近更新</div>
+        ${rec.length
+          ? `<div class="recent">${rec.map(r=>`<a class="row clickable" data-go="${r[3]}" data-slug="${r[3]==='note'?r[4]:''}" data-id="${r[3]==='lab'?r[4]:''}">
+            <span class="ti">${ic(typeIcon[r[5]]||'doc','sm')}</span>
+            <span class="tx"><span class="k">${r[0]}</span>${r[1]}</span>
+            <span class="dt">${r[2]}</span>
+            ${ic('arrow-r','ic-arrow')}
+          </a>`).join('')}</div>`
+          : `<div class="empty">${ic('inbox')}<div>暂无已发布的笔记和实验。<br><a class="link" data-go="roadmap">查看学习路线 ${ic('arrow-r','sm')}</a></div></div>`}
+      </div>
     </div>
   </div>`;
 }
@@ -1033,7 +1098,7 @@ function pageRoadmap(){
     <div class="card ${current?'hl':''}">
       <div class="bar" style="margin-bottom:6px">
         <div style="display:flex;align-items:center;gap:11px">
-          <span class="no" style="width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;background:${current?'var(--accent)':'var(--bg-sunken)'};color:${current?'#fff':'var(--ink-3)'}">${String(i+1).padStart(2,'0')}</span>
+          <span class="no" style="width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;background:${current?'var(--accent)':'var(--bg-sunken)'};color:${current?'var(--on-accent)':'var(--ink-3)'}">${String(i+1).padStart(2,'0')}</span>
           <h3>${s.name}</h3>
         </div>
         ${demo ? `<span class="tag ${STAT_TAG[s.status]}"><span class="d"></span>${STAT[s.status]}</span>` : ''}
@@ -1228,7 +1293,7 @@ function pageLabsReal(){
     <div class="lbl-c" style="margin-bottom:9px">写一篇 Lab 必须同时满足四条，缺一条就不要发</div>
     <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:9px">
       ${REAL.labRules.map((r,i)=>`<li style="display:flex;gap:11px">
-        <span style="width:22px;height:22px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px">${i+1}</span>
+        <span style="width:22px;height:22px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent);font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px">${i+1}</span>
         <span style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.6"><b style="color:var(--ink)">${r[0]}</b>　${r[1]}</span></li>`).join('')}
     </ul>
   </div>
@@ -1390,7 +1455,7 @@ function pageAbout(){
     <div class="lbl-c" style="margin-bottom:9px">这个站的四条原则</div>
     <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:10px">
       ${a.principles.map((p,i)=>`<li style="display:flex;gap:11px">
-        <span style="width:22px;height:22px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px">${i+1}</span>
+        <span style="width:22px;height:22px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent);font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px">${i+1}</span>
         <span style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.6"><b style="color:var(--ink)">${p[0]}</b><br>${p[1]}</span></li>`).join('')}
     </ul>
   </div>
