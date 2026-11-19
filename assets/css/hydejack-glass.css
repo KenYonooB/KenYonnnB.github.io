@@ -1,0 +1,98 @@
+/* Overrides for the Jekyll pages rendered by Hydejack. */
+@media screen {
+  html body,
+  html body.dark-mode {
+    --body-bg: var(--site-glass);
+    --body-color: var(--site-text);
+    --border-color: var(--site-edge);
+    --gray: var(--site-muted);
+    --gray-text: var(--site-muted);
+    --menu-text: var(--site-text);
+    --gray-bg: rgba(212, 239, 255, .08);
+  }
+
+  /* Hide Hydejack's opaque left rail and its separate sidebar image. */
+  html body::before {
+    content: none;
+  }
+
+  #_sidebar .sidebar-bg {
+    display: none;
+  }
+
+  #_main {
+    border-style: solid;
+    border-color: transparent;
+    border-width: var(--site-safe-top) var(--site-safe-right)
+      var(--site-safe-bottom) var(--site-safe-left);
+  }
+
+  #_navbar {
+    padding: var(--site-safe-top) var(--site-safe-right) 0 var(--site-safe-left);
+  }
+
+  #_sidebar .sidebar-sticky {
+    padding: calc(1.5rem + var(--site-safe-top)) calc(1.5rem + var(--site-safe-right))
+      calc(1.5rem + var(--site-safe-bottom)) calc(1.5rem + var(--site-safe-left));
+  }
+
+  #_main > .page,
+  #_sidebar,
+  #_navbar .nav-btn-bar {
+    background: rgba(13, 16, 22, .24);
+    background: var(--site-glass);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+
+  #_sidebar,
+  #_navbar .nav-btn-bar {
+    background: rgba(13, 16, 22, .30);
+    background: var(--site-glass-strong);
+  }
+
+  #_main > .page {
+    border: 1px solid var(--site-edge);
+    border-radius: 14px;
+    padding: 1rem;
+  }
+
+  #_main > .page table th,
+  #_main > .page table td {
+    background-color: transparent;
+  }
+
+  #_main > .page table th {
+    background-color: var(--gray-bg);
+  }
+
+  .theme-ocean-toggle {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    right: calc(14px + var(--site-safe-right));
+    bottom: calc(14px + var(--site-safe-bottom));
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--site-edge);
+    border-radius: 50%;
+    color: var(--site-text);
+    background: rgba(13, 16, 22, .30);
+    background: var(--site-glass-strong);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    cursor: pointer;
+  }
+
+  .theme-ocean-toggle[hidden],
+  .theme-ocean-toggle:not(.is-paused) .ocean-play,
+  .theme-ocean-toggle.is-paused .ocean-pause { display: none; }
+}
+
+@media print {
+  html { color-scheme: light; }
+}
