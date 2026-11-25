@@ -1,0 +1,742 @@
+/* ==========================================================================
+   LiteKit 效率四件套专属样式系统（延续暗黑毛玻璃与钴蓝点缀设计语言）
+   ========================================================================== */
+
+/* 1. 2x2 作品集 Bento 矩阵卡片 */
+.home-showcase {
+  margin-top: 10px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.bento-card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transition: border-color .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease);
+}
+
+.bento-card:hover {
+  border-color: var(--accent-line);
+  box-shadow: var(--sh-2);
+  transform: translateY(-2px);
+}
+
+.bento-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.bento-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  color: var(--accent-ink);
+}
+
+.bento-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bento-code {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-4);
+  margin-bottom: 4px;
+}
+
+.bento-title {
+  font-size: var(--fs-lg);
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.bento-title a {
+  color: var(--ink);
+}
+
+.bento-title a:hover {
+  color: var(--accent-ink);
+  text-decoration: none;
+}
+
+.bento-pain {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+
+.bento-hl {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--fs-xs);
+  color: var(--ok-ink);
+  background: rgba(37, 119, 77, .10);
+  border: 1px solid rgba(128, 226, 174, .24);
+  border-radius: var(--r-sm);
+  padding: 6px 10px;
+}
+
+.bento-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+/* 2. 分类胶囊按钮 */
+.filter-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill-btn {
+  font: inherit;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  padding: 6px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .15s var(--ease);
+}
+
+.pill-btn:hover {
+  border-color: var(--line-2);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.pill-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* 3. 工具工作台通用容器与顶栏 */
+.tool-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tool-header-actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.pm-drawer {
+  border: 1px solid var(--accent-line);
+  background: linear-gradient(135deg, rgba(49, 87, 182, .16), rgba(13, 18, 28, .45));
+  border-radius: var(--r);
+  padding: 16px 18px;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pm-drawer.open {
+  display: flex;
+  animation: fade .18s var(--ease);
+}
+
+.pm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pm-cell {
+  background: rgba(10, 13, 20, .46);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  line-height: 1.65;
+}
+
+.pm-cell b {
+  display: block;
+  color: var(--accent-ink);
+  font-size: var(--fs-sm);
+  margin-bottom: 4px;
+}
+
+.tool-shell {
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--sh-2);
+}
+
+.tool-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.preset-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chip {
+  font: inherit;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--ink-2);
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 6px 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .14s var(--ease);
+}
+
+.chip:hover {
+  border-color: var(--line-2);
+  color: var(--ink);
+  background: var(--bg-sunken);
+}
+
+.chip.active {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.chip.demo-chip {
+  background: rgba(37, 119, 77, .16);
+  border-color: var(--ok-line);
+  color: var(--ok-ink);
+}
+
+.chip.demo-chip:hover {
+  background: rgba(37, 119, 77, .26);
+}
+
+/* 开关复选框 */
+.rule-bar {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px 13px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+}
+
+.sw-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.sw-label input {
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+/* 双栏布局 */
+.split-pane {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.pane-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+.tk-textarea, .tk-input {
+  width: 100%;
+  background: rgba(8, 11, 17, .55);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--fs-sm);
+  line-height: 1.72;
+  padding: 13px 15px;
+  outline: none;
+  transition: border-color .15s var(--ease), background .15s var(--ease);
+}
+
+.tk-textarea {
+  min-height: 290px;
+  resize: vertical;
+}
+
+.tk-input {
+  height: 38px;
+  padding: 0 12px;
+  border-radius: var(--r-sm);
+}
+
+.tk-textarea:focus, .tk-input:focus {
+  border-color: var(--accent-line);
+  background: rgba(8, 11, 17, .74);
+}
+
+.tk-textarea.readonly-out {
+  background: rgba(14, 22, 36, .40);
+  border-color: rgba(150, 190, 255, .28);
+}
+
+/* 统计状态条 */
+.telemetry-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  background: rgba(8, 12, 20, .48);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+.telemetry-metrics {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.telemetry-metrics b {
+  font-family: var(--mono);
+  color: var(--accent-ink);
+  font-size: var(--fs-sm);
+}
+
+/* 4. SnapCard 灵感卡片台专属 */
+.snap-layout {
+  display: grid;
+  grid-template-columns: 1.05fr 1.15fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.snap-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ctrl-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  font-weight: 600;
+}
+
+.ctrl-label span.val {
+  font-family: var(--mono);
+  color: var(--accent-ink);
+}
+
+.theme-swatches {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.swatch-btn {
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 8px 10px;
+  background: var(--bg-soft);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all .14s var(--ease);
+}
+
+.swatch-btn:hover {
+  border-color: var(--line-2);
+  color: var(--ink);
+}
+
+.swatch-btn.active {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  color: #fff;
+  font-weight: 600;
+}
+
+.swatch-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex: none;
+  border: 1px solid rgba(255,255,255,.28);
+}
+
+.snap-stage {
+  background: rgba(6, 9, 14, .62);
+  border: 1px dashed var(--line-2);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 420px;
+}
+
+.snap-canvas-wrap {
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.snap-canvas-wrap canvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .55);
+}
+
+input[type="range"].tk-range {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* 5. SafePic 离线水印压缩专属 */
+.privacy-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 15px;
+  background: var(--ok-bg);
+  border: 1px solid var(--ok-line);
+  border-radius: var(--r-sm);
+  color: var(--ok-ink);
+  font-size: var(--fs-xs);
+}
+
+.dropzone {
+  border: 1.5px dashed var(--line-2);
+  border-radius: var(--r);
+  padding: 20px;
+  text-align: center;
+  background: rgba(10, 14, 22, .45);
+  cursor: pointer;
+  transition: border-color .15s var(--ease), background .15s var(--ease);
+}
+
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--accent-ink);
+  background: var(--accent-soft);
+}
+
+.safe-preview-box {
+  background: rgba(6, 9, 14, .66);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  overflow: hidden;
+}
+
+.safe-preview-box img, .safe-preview-box canvas {
+  max-width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+/* 6. FlowZone 深海心流舱专属 */
+.fz-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 18px;
+}
+
+.fz-timer-card {
+  background: linear-gradient(160deg, rgba(24, 42, 86, .28), rgba(9, 12, 19, .58));
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-lg);
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 15px;
+}
+
+.fz-clock {
+  font-family: var(--mono);
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.03em;
+  color: #fff;
+  text-shadow: 0 0 28px rgba(100, 155, 255, .32);
+  font-variant-numeric: tabular-nums;
+}
+
+.fz-progress-ring {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, .09);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.fz-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3157b6, #72e3a4);
+  border-radius: 99px;
+  transition: width .4s linear;
+}
+
+.mixer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mixer-track {
+  background: rgba(9, 13, 21, .50);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  transition: border-color .15s var(--ease);
+}
+
+.mixer-track.playing {
+  border-color: var(--accent-line);
+  background: rgba(32, 56, 112, .20);
+}
+
+.mixer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.mixer-head .vol-txt {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--accent-ink);
+}
+
+/* 拟物超市心流小票 */
+.receipt-modal {
+  border: 1px solid var(--line-2);
+  background: rgba(11, 15, 24, .75);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.receipt-modal.show {
+  display: flex;
+  animation: fade .2s var(--ease);
+}
+
+.receipt-paper {
+  width: min(360px, 100%);
+  background: #f6f4ee;
+  color: #1c2128;
+  font-family: var(--mono);
+  padding: 22px 20px;
+  border-radius: 4px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, .5);
+  border-top: 5px dashed #0a0a0b;
+  border-bottom: 5px dashed #0a0a0b;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.receipt-paper hr {
+  border: 0;
+  border-top: 1px dashed #8c959f;
+  margin: 10px 0;
+}
+
+/* 全屏深海沉浸模式（联动 binary-ocean.js） */
+.zen-hud {
+  display: none;
+}
+
+body.zen-ocean .ocean-backdrop {
+  opacity: 1 !important;
+  transition: opacity .45s ease;
+}
+
+body.zen-ocean .stage {
+  display: none !important;
+}
+
+body.zen-ocean .zen-hud {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  padding: 24px;
+}
+
+body.zen-ocean .zen-capsule {
+  pointer-events: auto;
+  background: rgba(10, 14, 22, .56);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(184, 221, 255, .28);
+  border-radius: 20px;
+  padding: 28px 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .65);
+  max-width: 460px;
+  width: 100%;
+}
+
+/* 吐司轻提示 */
+.tk-toast {
+  position: fixed;
+  bottom: 26px;
+  right: 26px;
+  z-index: 120;
+  background: rgba(16, 24, 38, .94);
+  border: 1px solid var(--ok-line);
+  color: var(--ok-ink);
+  padding: 10px 16px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  box-shadow: var(--sh-3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
+}
+
+.tk-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 响应式适配 */
+@media (max-width: 960px) {
+  .bento-grid,
+  .split-pane,
+  .snap-layout,
+  .fz-grid,
+  .pm-grid {
+    grid-template-columns: 1fr;
+  }
+  .theme-swatches {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fz-clock {
+    font-size: 48px;
+  }
+}

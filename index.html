@@ -6,41 +6,35 @@
 <meta name="theme-color" content="#0a0a0b" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>AI Infra 学习档案</title>
-<meta name="description" content="AI Infra 学习路线、技术笔记与可复现实验。" />
+<title>LiteKit · 个人数字实验室与效率作品集</title>
+<meta name="description" content="捕捉日常高频痛点，构建免登录、纯本地运行的极简效率工具集与产品造物复盘。" />
 <style>html,body{background-color:#0a0a0b;color:#f1f8fa;color-scheme:dark}</style>
 <link rel="stylesheet" href="./assets/css/site-glass.css" />
+<link rel="stylesheet" href="./assets/css/tools-suite.css" />
 <style>
   /* ===================== 1. 设计令牌 ===================== */
   :root{
-    /* 中性色阶 */
     --bg:var(--site-glass-strong); --bg-soft:rgba(213,240,252,.08);
-    --bg-sunken:rgba(5,15,23,.18); --surface:var(--site-glass);
+    --bg-sunken:rgba(5,15,23,.22); --surface:var(--site-glass);
     --ink:var(--site-text); --ink-2:#e0edf1; --ink-3:#d2e2e9; --ink-4:var(--site-muted);
     --line:var(--site-edge); --line-2:rgba(216,240,255,.35);
-    /* 品牌主色 */
     --accent:#3157b6; --accent-hover:#25499e; --accent-ink:var(--site-link);
-    --accent-soft:rgba(73,110,192,.15); --accent-line:rgba(150,190,255,.40);
-    /* 语义色 */
-    --ok-bg:rgba(37,119,77,.14); --ok-line:rgba(128,226,174,.38); --ok-ink:#a9f1c3; --ok-dot:#72e3a4;
+    --accent-soft:rgba(73,110,192,.16); --accent-line:rgba(150,190,255,.42);
+    --ok-bg:rgba(37,119,77,.16); --ok-line:rgba(128,226,174,.40); --ok-ink:#a9f1c3; --ok-dot:#72e3a4;
     --do-bg:var(--accent-soft); --do-line:var(--accent-line); --do-ink:#c6dfff; --do-dot:#9bb7ff;
-    --pd-bg:rgba(163,105,19,.13); --pd-line:rgba(242,193,103,.38); --pd-ink:#ffe0a1; --pd-dot:#f1be6f;
+    --pd-bg:rgba(163,105,19,.15); --pd-line:rgba(242,193,103,.40); --pd-ink:#ffe0a1; --pd-dot:#f1be6f;
     --df-bg:var(--bg-soft); --df-line:var(--line); --df-ink:var(--ink-3); --df-dot:#becbd9;
-    --wn-bg:rgba(177,65,61,.14); --wn-line:rgba(255,172,164,.38); --wn-ink:#ffc4bd;
-    /* 代码区 */
+    --wn-bg:rgba(177,65,61,.15); --wn-line:rgba(255,172,164,.40); --wn-ink:#ffc4bd;
     --code-bg:var(--site-glass-strong); --code-ink:#e6edf7; --code-dim:#c5d5e5;
     --code-key:#b5d8ff; --code-str:#b8edbd; --code-num:#ffe0a1;
-    /* 字体 */
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
     --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono","Courier New",monospace;
-    /* 字号 */
     --fs-xs:12px; --fs-sm:13px; --fs-base:15px; --fs-md:16px;
     --fs-lg:18px; --fs-xl:21px; --fs-2xl:26px; --fs-3xl:34px;
-    /* 圆角 / 阴影 */
     --r-xs:5px; --r-sm:7px; --r:10px; --r-lg:14px; --r-pill:99px;
-    --sh-1:0 1px 2px rgba(16,24,40,.05);
-    --sh-2:0 2px 8px rgba(16,24,40,.07);
-    --sh-3:0 12px 32px rgba(16,24,40,.12);
+    --sh-1:0 1px 2px rgba(16,24,40,.06);
+    --sh-2:0 4px 14px rgba(10,16,28,.18);
+    --sh-3:0 14px 36px rgba(6,10,18,.28);
     --ease:cubic-bezier(.4,0,.2,1);
   }
 
@@ -53,9 +47,8 @@
   }
   a{color:var(--accent-ink); text-decoration:none}
   a:hover{text-decoration:underline}
-  /* 组件化的 <a>（按钮 / 卡片 / 列表行 / logo）保持观感，不做下划线 */
-  a.btn:hover, a.card:hover, a.row:hover, a.link:hover, a.logo:hover{text-decoration:none}
-  a.card, a.row, a.logo{color:inherit}
+  a.btn:hover, a.card:hover, a.row:hover, a.link:hover, a.logo:hover, a.bento-card:hover{text-decoration:none}
+  a.card, a.row, a.logo, a.bento-card{color:inherit}
   a.card{display:block}
   h1,h2,h3,h4{margin:0; font-weight:600; letter-spacing:-.011em}
   p{margin:0}
@@ -65,9 +58,9 @@
   .ic.lg{width:19px;height:19px;stroke-width:1.7}
   .ic.fill{fill:currentColor;stroke:none}
 
-  /* ===================== 4. 画布 ===================== */
+  /* ===================== 3. 画布与主框架 ===================== */
   .stage{
-    --stage-top:28px; --stage-side:18px; --stage-bottom:80px;
+    --stage-top:26px; --stage-side:18px; --stage-bottom:68px;
     position:relative; padding:var(--stage-top) var(--stage-side) var(--stage-bottom);
     padding:calc(var(--stage-top) + var(--site-safe-top)) calc(var(--stage-side) + var(--site-safe-right))
       calc(var(--stage-bottom) + var(--site-safe-bottom)) calc(var(--stage-side) + var(--site-safe-left));
@@ -80,7 +73,8 @@
     border-radius:var(--r-lg); overflow:hidden; display:flex; flex-direction:column;
     box-shadow:var(--sh-3);
   }
-  /* ===================== 5. 顶部导航 ===================== */
+
+  /* ===================== 4. 顶部导航 ===================== */
   .nav{
     display:flex; align-items:center; justify-content:space-between; gap:20px;
     padding:0 32px; height:66px; background:var(--bg);
@@ -89,19 +83,20 @@
   .nav .logo{white-space:nowrap; display:flex; align-items:center; gap:10px; font-weight:700; font-size:var(--fs-lg); letter-spacing:-.015em}
   .nav .logo .mark{
     width:28px;height:28px;border-radius:8px;background:var(--accent);color:#fff;
-    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
-    font-family:var(--mono); letter-spacing:0;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;
+    font-family:var(--mono); letter-spacing:0; box-shadow:0 2px 10px rgba(49,87,182,.45);
   }
+  .nav .logo .sub{font-size:var(--fs-xs); font-weight:500; color:var(--ink-4); margin-left:2px}
   .nav .links{display:flex; gap:4px; align-items:center}
   .nav .links a{
-    color:var(--ink-2); font-size:var(--fs-base); padding:6px 12px; border-radius:var(--r-sm);
+    color:var(--ink-2); font-size:var(--fs-base); padding:6px 13px; border-radius:var(--r-sm);
     cursor:pointer; transition:background .15s var(--ease), color .15s var(--ease);
   }
   .nav .links a:hover{background:var(--bg-soft); color:var(--ink); text-decoration:none}
   .nav .links a.cur{color:var(--accent-ink); font-weight:600; background:var(--accent-soft)}
   .nav .right{display:flex; gap:10px; align-items:center}
   .search{
-    width:230px; height:38px; border-radius:var(--r-pill); background:var(--bg-soft);
+    width:236px; height:38px; border-radius:var(--r-pill); background:var(--bg-soft);
     border:1px solid var(--line); display:flex; align-items:center; gap:8px;
     padding:0 12px 0 14px; color:var(--ink-3); font-size:var(--fs-sm);
     cursor:pointer; text-align:left; font-family:inherit;
@@ -120,10 +115,11 @@
   }
   .icon-btn:hover{border-color:var(--line-2); color:var(--ink); background:var(--bg-sunken)}
   .burger{display:none}
-  /* ===================== 6. 侧栏 ===================== */
+
+  /* ===================== 5. 侧栏与主区 ===================== */
   .body{display:flex; flex:1; min-height:780px}
   .side{
-    width:256px; flex:none; padding:22px 14px 22px 18px; background:var(--bg-soft);
+    width:254px; flex:none; padding:22px 14px 22px 18px; background:var(--bg-soft);
     border-right:1px solid var(--line); font-size:var(--fs-sm); color:var(--ink-2);
   }
   .side .grp{
@@ -132,13 +128,12 @@
   }
   .side .grp:first-child{margin-top:0}
   .side a{
-    display:flex; align-items:center; gap:7px; color:var(--ink-2); padding:6px 10px;
-    border-radius:var(--r-sm); cursor:pointer; position:relative; line-height:1.5;
+    display:flex; align-items:center; gap:8px; color:var(--ink-2); padding:7px 10px;
+    border-radius:var(--r-sm); cursor:pointer; position:relative; line-height:1.45;
     transition:background .13s var(--ease), color .13s var(--ease);
   }
   .side a:hover{background:var(--bg-sunken); color:var(--ink); text-decoration:none}
-  .side a.ind1{padding-left:20px}
-  .side a.ind2{padding-left:32px; font-size:var(--fs-xs); color:var(--ink-3)}
+  .side a.ind1{padding-left:16px}
   .side a.cur{background:var(--accent-soft); color:var(--accent-ink); font-weight:600}
   .side a.cur::before{
     content:''; position:absolute; left:0; top:6px; bottom:6px; width:3px;
@@ -146,12 +141,13 @@
   }
   .side .cnt{margin-left:auto; font-size:11px; color:var(--ink-4); font-family:var(--mono)}
   .scrim{display:none}
-  .main{flex:1; min-width:0; padding:34px 40px 44px; display:flex; flex-direction:column; gap:16px}
-  /* ===================== 7. 通用元件 ===================== */
-  .crumb{display:flex; align-items:center; gap:6px; font-size:var(--fs-sm); color:var(--ink-3)}
+  .main{flex:1; min-width:0; padding:32px 38px 44px; display:flex; flex-direction:column; gap:18px}
+
+  /* ===================== 6. 通用元件 ===================== */
+  .crumb{display:flex; align-items:center; gap:6px; font-size:var(--fs-sm); color:var(--ink-3); flex-wrap:wrap}
   .crumb .ic{width:13px;height:13px}
   h1.page{font-size:var(--fs-2xl); line-height:1.3; margin:0}
-  .lead{font-size:var(--fs-base); color:var(--ink-3); margin:0; max-width:74ch; line-height:1.7}
+  .lead{font-size:var(--fs-base); color:var(--ink-3); margin:0; max-width:76ch; line-height:1.7}
 
   .card{
     background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
@@ -167,7 +163,6 @@
   .sec-h{display:flex; align-items:center; gap:8px; font-size:var(--fs-sm); font-weight:600; color:var(--ink-2)}
   .lbl-c{font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-4)}
 
-  /* 标签 pill */
   .tag{
     display:inline-flex; align-items:center; gap:5px; font-size:var(--fs-xs); font-weight:500;
     padding:2px 9px; border-radius:var(--r-pill); border:1px solid var(--line);
@@ -177,12 +172,10 @@
   .tag.done{background:var(--ok-bg); border-color:var(--ok-line); color:var(--ok-ink)}
   .tag.doing{background:var(--do-bg); border-color:var(--do-line); color:var(--do-ink)}
   .tag.todo{background:var(--df-bg); border-color:var(--df-line); color:var(--df-ink)}
-  .tag.draft{background:var(--df-bg); border-color:var(--df-line); color:var(--df-ink)}
   .tag.pending{background:var(--pd-bg); border-color:var(--pd-line); color:var(--pd-ink)}
 
-  /* 按钮 */
   .btn{
-    font:inherit; font-size:var(--fs-md); height:46px; min-width:168px; padding:0 20px;
+    font:inherit; font-size:var(--fs-base); height:44px; min-width:154px; padding:0 18px;
     border-radius:var(--r-sm); border:1px solid transparent; cursor:pointer; font-weight:600;
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
     transition:background .15s var(--ease), border-color .15s var(--ease), transform .1s var(--ease);
@@ -192,7 +185,8 @@
   .btn.primary:hover{background:var(--accent-hover); text-decoration:none}
   .btn.ghost{background:var(--bg); color:var(--ink); border-color:var(--line-2)}
   .btn.ghost:hover{background:var(--bg-soft); border-color:var(--ink-4); text-decoration:none}
-  .btns{display:flex; gap:12px; flex-wrap:wrap}
+  .btn.sm{height:34px; min-width:0; padding:0 13px; font-size:var(--fs-xs)}
+  .btns{display:flex; gap:11px; flex-wrap:wrap}
   .link{
     color:var(--accent-ink); cursor:pointer; display:inline-flex; align-items:center; gap:5px;
     font-weight:500; text-decoration:none; border-bottom:1px solid transparent;
@@ -202,67 +196,64 @@
   .link:hover .ic-arrow{transform:translateX(3px)}
 
   .foot{
-    margin-top:auto; height:62px; flex:none; background:var(--bg-soft);
-    border-top:1px solid var(--line); display:flex; align-items:center; gap:16px;
-    padding:0 32px; font-size:var(--fs-sm); color:var(--ink-3); flex-wrap:wrap;
+    margin-top:auto; min-height:60px; flex:none; background:var(--bg-soft);
+    border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:10px 32px; font-size:var(--fs-sm); color:var(--ink-3); flex-wrap:wrap;
   }
+  .foot-left, .foot-right{display:flex; align-items:center; gap:18px; flex-wrap:wrap}
   .foot .fi{display:inline-flex; align-items:center; gap:6px; cursor:pointer}
-  .foot .fi:hover{color:var(--ink-2)}
+  .foot .fi:hover{color:var(--ink-2); text-decoration:none}
 
-  /* ===================== 8. 首页 ===================== */
-  .hero{display:flex; gap:52px; padding:6px 0 0}
-  .hero .left{flex:3; min-width:0; display:flex; flex-direction:column; gap:17px}
+  /* ===================== 7. 首页 Hero ===================== */
+  .hero{display:flex; gap:44px; padding:4px 0 0}
+  .hero .left{flex:3; min-width:0; display:flex; flex-direction:column; gap:16px}
   .eyebrow{
     display:inline-flex; align-items:center; gap:7px; font-size:var(--fs-xs); font-weight:600;
-    color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--accent-line);
+    color:var(--ok-ink); background:var(--ok-bg); border:1px solid var(--ok-line);
     border-radius:var(--r-pill); padding:3px 12px; width:fit-content;
   }
-  .name{font-size:52px; font-weight:700; line-height:1.06; letter-spacing:-.03em}
-  .direction{font-size:var(--fs-xl); font-weight:600; line-height:1.5; letter-spacing:-.015em}
+  .eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--ok-dot);box-shadow:0 0 8px var(--ok-dot)}
+  .name{font-size:44px; font-weight:700; line-height:1.14; letter-spacing:-.028em}
+  .direction{font-size:var(--fs-lg); color:var(--ink-2); font-weight:500; line-height:1.55}
   .focus{
-    font-size:var(--fs-md); color:var(--ink-2); display:flex; align-items:flex-start; gap:9px;
+    font-size:var(--fs-sm); color:var(--ink-2); display:flex; align-items:flex-start; gap:10px;
     background:var(--bg-soft); border-left:3px solid var(--accent); border-radius:0 var(--r-sm) var(--r-sm) 0;
-    padding:11px 14px;
+    padding:11px 14px; line-height:1.65;
   }
-  .focus .ic{margin-top:4px; color:var(--accent)}
+  .focus .ic{margin-top:3px; color:var(--accent-ink)}
   .stat-row{display:flex; gap:12px}
   .stat{
     flex:1; background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
-    padding:14px 16px; box-shadow:var(--sh-1);
+    padding:13px 15px; box-shadow:var(--sh-1);
   }
-  .stat .v{font-size:var(--fs-2xl); font-weight:700; line-height:1.1; font-family:var(--mono); letter-spacing:-.02em}
-  .stat .l{font-size:var(--fs-xs); color:var(--ink-3); margin-top:2px}
+  .stat .v{font-size:var(--fs-2xl); font-weight:700; line-height:1.1; font-family:var(--mono); letter-spacing:-.02em; color:var(--ink)}
+  .stat .l{font-size:var(--fs-xs); color:var(--ink-3); margin-top:4px}
   .contact{
-    display:flex; align-items:center; gap:8px; padding:10px 14px; font-size:var(--fs-sm);
+    display:flex; align-items:center; gap:14px; padding:10px 14px; font-size:var(--fs-sm);
     color:var(--ink-2); background:var(--bg-soft); border:1px solid var(--line);
     border-radius:var(--r-sm); flex-wrap:wrap;
   }
 
-  .hero .right{flex:2; min-width:0; display:flex; flex-direction:column; gap:14px}
+  .hero .right{flex:2.15; min-width:0; display:flex; flex-direction:column; gap:13px}
   .ocean-panel{
-    position:relative; isolation:isolate; min-height:236px; overflow:hidden;
+    position:relative; isolation:isolate; min-height:218px; overflow:hidden;
     border:1px solid var(--line); border-radius:var(--r-lg);
-    background:var(--surface);
+    background:var(--surface); display:flex; flex-direction:column; justify-content:flex-end;
   }
   .ocean-preview{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
-  @media print{
-    .ocean-panel{display:none}
-    :root{
-      color-scheme:light;
-      --site-glass:transparent; --site-glass-strong:transparent;
-      --site-text:#17212b; --site-muted:#465464; --site-link:#174a98; --site-edge:#d2dbe3;
-      --ink-2:#303d49; --ink-3:#465464; --ok-ink:#195e36; --do-ink:#174a98;
-      --pd-ink:#694100; --wn-ink:#802c2c; --code-ink:#17212b;
-      --code-dim:#465464; --code-key:#174a98; --code-num:#694100;
-    }
-    html,body{background:#fff}
+  .ocean-caption{
+    position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:9px 14px; background:rgba(10,12,18,.68); border-top:1px solid var(--line);
+    font-size:var(--fs-xs); color:var(--ink-3); backdrop-filter:blur(8px);
   }
+  .ocean-caption code{font-family:var(--mono); color:var(--accent-ink)}
+
   .recent{
     background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
     padding:6px 8px; box-shadow:var(--sh-1);
   }
   .recent .row{
-    display:flex; align-items:center; gap:10px; padding:10px 10px; border-radius:var(--r-sm);
+    display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:var(--r-sm);
     cursor:pointer; transition:background .13s var(--ease);
   }
   .recent .row + .row{border-top:1px solid var(--line)}
@@ -271,13 +262,13 @@
     width:30px;height:30px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;
     background:var(--accent-soft); color:var(--accent-ink);
   }
-  .recent .row .tx{flex:1; min-width:0; font-size:var(--fs-sm); line-height:1.5}
-  .recent .row .tx .k{font-size:11px; color:var(--ink-4); display:block; font-weight:600; letter-spacing:.05em}
-  .recent .row .dt{font-size:var(--fs-xs); color:var(--ink-4); font-family:var(--mono); flex:none}
+  .recent .row .tx{flex:1; min-width:0; font-size:var(--fs-sm); line-height:1.42}
+  .recent .row .tx .k{font-size:11px; color:var(--ink-4); display:block; font-weight:600; font-family:var(--mono)}
+  .recent .row .dt{font-size:11px; color:var(--ok-ink); background:var(--ok-bg); border:1px solid var(--ok-line); padding:1px 7px; border-radius:var(--r-pill); flex:none}
   .recent .row:hover .ic-arrow{transform:translateX(3px)}
   .recent .row .ic-arrow{color:var(--ink-4); transition:transform .15s var(--ease)}
 
-  /* ===================== 9. 表格 ===================== */
+  /* ===================== 8. 表格 / 正文段 / 代码 ===================== */
   .tbl-wrap{border:1px solid var(--line); border-radius:var(--r); overflow:hidden; background:var(--surface); box-shadow:var(--sh-1)}
   .tbl{width:100%; border-collapse:separate; border-spacing:0; font-size:var(--fs-sm)}
   .tbl th,.tbl td{padding:12px 14px; text-align:left; border-bottom:1px solid var(--line); vertical-align:middle}
@@ -286,108 +277,44 @@
     font-size:var(--fs-xs); font-weight:700; color:var(--ink-3);
     letter-spacing:.06em; text-transform:uppercase; white-space:nowrap;
   }
-  .tbl tbody tr{cursor:pointer; transition:background .13s var(--ease)}
-  .tbl tbody tr:hover{background:var(--accent-soft)}
+  .tbl tbody tr.clickable{cursor:pointer; transition:background .13s var(--ease)}
+  .tbl tbody tr.clickable:hover{background:var(--accent-soft)}
   .tbl tbody tr:last-child td{border-bottom:0}
   .tbl td.num{font-variant-numeric:tabular-nums; white-space:nowrap; font-family:var(--mono)}
   .tbl td.strong{font-weight:700; color:var(--accent-ink); font-size:var(--fs-base)}
-  .tbl td.weak{color:var(--ink-4)}
   .tbl .id{font-family:var(--mono); font-size:var(--fs-xs); color:var(--ink-3); white-space:nowrap}
   .scrollx{overflow-x:auto; -webkit-overflow-scrolling:touch}
-  .scrollx table{min-width:660px}
+  .scrollx table{min-width:640px}
 
-  /* ===================== 10. 正文段 / 代码 / 环境 ===================== */
   .seg{
-    border:1px solid var(--line); border-radius:var(--r); padding:14px 16px 14px 15px;
+    border:1px solid var(--line); border-radius:var(--r); padding:15px 18px;
     background:var(--surface); display:flex; gap:13px; box-shadow:var(--sh-1);
   }
   .seg.req{background:var(--bg-soft); border-left:3px solid var(--accent)}
-  .seg.miss{border-style:dashed; border-left-style:dashed; border-left-color:var(--line-2); background:transparent; box-shadow:none}
   .seg .no{
     width:26px;height:26px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;
     font-size:var(--fs-xs); font-weight:700; font-family:var(--mono);
-    background:var(--bg-sunken); color:var(--ink-3); margin-top:2px;
+    background:var(--accent); color:#fff; margin-top:2px;
   }
-  .seg.req .no{background:var(--accent); color:#fff}
   .seg .bd{flex:1; min-width:0}
-  .seg .h{display:flex; align-items:center; gap:8px; margin-bottom:3px; flex-wrap:wrap}
+  .seg .h{display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap}
   .seg .h b{font-size:var(--fs-base); color:var(--ink)}
-  .seg .h .reqd{font-size:11px; padding:1px 7px; border-radius:var(--r-pill); font-weight:600}
-  .seg .h .reqd.y{background:var(--accent-soft); color:var(--accent-ink); border:1px solid var(--accent-line)}
-  .seg .h .reqd.n{background:var(--bg-sunken); color:var(--ink-3); border:1px solid var(--line)}
-  .seg p{font-size:var(--fs-base); color:var(--ink-2); max-width:76ch}
-  .seg.miss p{color:var(--ink-4)}
+  .seg p{font-size:var(--fs-base); color:var(--ink-2); max-width:78ch; line-height:1.72}
 
-  .code{position:relative; border-radius:var(--r); overflow:hidden; background:var(--code-bg); box-shadow:var(--sh-2)}
-  .code .top{
-    display:flex; align-items:center; gap:8px; padding:9px 14px; background:var(--bg-soft);
-    border-bottom:1px solid var(--line);
-  }
-  .code .top .lang{font-family:var(--mono); font-size:11px; color:var(--code-dim); letter-spacing:.06em}
-  .code .cp{
-    margin-left:auto; font-size:var(--fs-xs); padding:5px 10px; border-radius:var(--r-xs);
-    background:var(--bg-soft); color:var(--ink-2); border:1px solid var(--line); cursor:pointer; font-family:inherit;
-    display:inline-flex; align-items:center; gap:5px; transition:background .15s var(--ease), color .15s var(--ease);
-  }
-  .code .cp:hover{background:var(--accent-soft); color:var(--ink)}
-  pre{
-    color:var(--code-ink); padding:15px 18px; margin:0;
-    font-family:var(--mono); font-size:13px; line-height:1.78; overflow-x:auto;
-  }
-  .tk-p{color:var(--code-key); font-weight:600}   /* $ 提示符 */
-  .tk-n{color:var(--code-num)}                     /* 数字 */
-  .tk-c{color:var(--code-dim)}                     /* 注释 / 次要 */
-
-  .env{
-    background:var(--accent-soft); border:1px solid var(--accent-line); border-radius:var(--r);
-    padding:15px 17px; font-size:var(--fs-sm);
-  }
-  .env .k{font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-4); margin-bottom:9px; display:flex; align-items:center; gap:6px}
-  .env .grid{display:flex; flex-wrap:wrap; gap:8px}
-  .env .cell{
-    background:var(--surface); border:1px solid var(--accent-line); border-radius:var(--r-sm);
-    padding:8px 12px; font-family:var(--mono); font-size:var(--fs-xs); color:var(--ink-2);
-  }
-  .env .honest{
-    margin-top:11px; display:flex; align-items:flex-start; gap:8px; font-size:var(--fs-xs);
-    color:var(--pd-ink); background:var(--pd-bg); border:1px solid var(--pd-line);
-    border-radius:var(--r-sm); padding:8px 11px;
-  }
-  .chk{display:inline-flex; align-items:center; gap:6px; font-size:var(--fs-xs)}
-  .chk .box{
-    width:15px;height:15px;border-radius:4px;border:1.5px solid var(--line-2);flex:none;
-    display:flex;align-items:center;justify-content:center;background:var(--surface);
-  }
-  .chk.on .box{background:var(--accent); border-color:var(--accent); color:#fff}
-  .warn{
-    background:var(--wn-bg); border:1px solid var(--wn-line); color:var(--wn-ink);
-    border-radius:var(--r); padding:12px 15px; font-size:var(--fs-sm);
-    display:none; align-items:flex-start; gap:9px;
-  }
-  .warn.show{display:flex}
-
-  /* ===================== 11. 空态 / 404 ===================== */
-  .empty{
-    border:1px dashed var(--line-2); border-radius:var(--r); padding:26px 20px;
-    text-align:center; color:var(--ink-3); font-size:var(--fs-sm);
-    display:flex; flex-direction:column; align-items:center; gap:9px; background:var(--bg-soft);
-  }
-  .empty .ic{width:26px;height:26px;color:var(--ink-4);stroke-width:1.4}
   .nf{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:64px 20px; text-align:center}
   .nf .big{
-    font-size:96px; font-weight:700; line-height:1; letter-spacing:-.04em;
+    font-size:92px; font-weight:700; line-height:1; letter-spacing:-.04em;
     color:transparent; -webkit-text-stroke:2px var(--line-2);
   }
-  /* ===================== 12. 搜索层 ===================== */
+
+  /* ===================== 9. 搜索浮层 ===================== */
   .overlay{
-    position:fixed; inset:0; z-index:100; background:rgba(13,16,22,.15);
-    display:none; overflow:auto; padding:88px 18px 18px;
-    padding:calc(88px + var(--site-safe-top)) calc(18px + var(--site-safe-right))
-      calc(18px + var(--site-safe-bottom)) calc(18px + var(--site-safe-left));
+    position:fixed; inset:0; z-index:100; background:rgba(10,12,18,.48); backdrop-filter:blur(4px);
+    display:none; overflow:auto; padding:84px 18px 18px;
   }
   .overlay.show{display:block}
   .ov-box{
-    max-width:660px; margin:0 auto; background:var(--bg); border:1px solid var(--line);
+    max-width:660px; margin:0 auto; background:rgba(14,18,26,.92); border:1px solid var(--line-2);
     border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--sh-3);
   }
   .ov-top{display:flex; align-items:center; gap:11px; padding:14px 16px; border-bottom:1px solid var(--line)}
@@ -398,22 +325,22 @@
     font-size:11px; color:var(--ink-3); border:1px solid var(--line); border-radius:var(--r-xs);
     padding:2px 7px; font-family:var(--mono); background:var(--bg-soft);
   }
-  .ov-list{max-height:392px; overflow:auto; padding:8px}
+  .ov-list{max-height:400px; overflow:auto; padding:8px}
   .ov-grp{font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-4); padding:10px 12px 5px}
   .ov-item{
     padding:10px 12px; border-radius:var(--r-sm); cursor:pointer; display:flex; align-items:center; gap:11px;
     width:100%; text-align:left; background:none; border:0; font:inherit; color:inherit;
     transition:background .13s var(--ease);
   }
-  .ov-item:hover, .ov-item:focus-visible{background:var(--accent-soft)}
+  .ov-item:hover, .ov-item:focus-visible{background:var(--accent-soft); outline:none}
   .ov-item .ti{
     width:28px;height:28px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;
-    background:var(--bg-sunken); color:var(--ink-3);
+    background:var(--bg-sunken); color:var(--accent-ink);
   }
-  .ov-item .t{font-size:var(--fs-base); color:var(--ink); line-height:1.45}
+  .ov-item .t{font-size:var(--fs-base); color:var(--ink); line-height:1.45; font-weight:500}
   .ov-item .d{font-size:var(--fs-xs); color:var(--ink-3)}
   .ov-item .ic-arrow{margin-left:auto; color:var(--ink-4)}
-  .ov-item mark{background:rgba(168,110,18,.20); color:#ffe0a1; border-radius:2px; padding:0 1px}
+  .ov-item mark{background:rgba(168,110,18,.28); color:#ffe0a1; border-radius:2px; padding:0 2px}
   .ov-none{padding:30px; text-align:center; color:var(--ink-3); font-size:var(--fs-sm)}
   .ov-foot{
     padding:9px 16px; border-top:1px solid var(--line); background:var(--bg-soft);
@@ -421,43 +348,44 @@
   }
   .ov-foot span{display:inline-flex; align-items:center; gap:5px}
 
-  /* ===================== 13. 示例提示 / 动效 ===================== */
-  .note-strip{
-    display:flex; gap:10px; align-items:flex-start; background:var(--bg-soft);
-    border:1px solid var(--line); border-left:3px solid var(--ink-4);
-    color:var(--ink-3); border-radius:var(--r-sm); padding:10px 14px; font-size:var(--fs-xs); line-height:1.65;
-  }
-  .note-strip .ic{margin-top:3px; color:var(--ink-4)}
-  body:not(.demo) .note-strip{display:none}
-  .demo-notice{padding:8px 16px; text-align:center; font-size:var(--fs-sm); background:var(--pd-bg); color:var(--pd-ink)}
-  .demo-notice[hidden]{display:none}
-  .fade{animation:fade .2s var(--ease)}
-  @keyframes fade{from{opacity:.35; transform:translateY(3px)}to{opacity:1; transform:none}}
+  /* ===================== 10. 动效 / 毛玻璃 / 响应式 ===================== */
+  .fade{animation:fade .18s var(--ease)}
+  @keyframes fade{from{opacity:.42; transform:translateY(3px)}to{opacity:1; transform:none}}
   @media (prefers-reduced-motion: reduce){ .fade{animation:none} }
+
   @media screen {
     .nav, .side, .foot, .card, .focus, .stat, .contact, .ocean-panel,
-    .recent, .tbl-wrap, .seg:not(.miss), .code, .env, .warn, .empty, .ov-box, .note-strip{
+    .recent, .tbl-wrap, .seg, .bento-card, .tool-shell{
       -webkit-backdrop-filter:blur(14px);
       backdrop-filter:blur(14px);
       background-color:rgba(13,16,22,.24);
       background-color:var(--surface);
     }
-    .nav, .side, .foot, .card.hl, .code, .ov-box{
-      background-color:rgba(13,16,22,.30);
+    .nav, .side, .foot, .card.hl{
+      background-color:rgba(13,16,22,.32);
       background-color:var(--bg);
     }
-    .warn{background-color:var(--wn-bg)}
   }
+
+  @media print{
+    .ocean-panel, .ocean-backdrop{display:none !important}
+    :root{
+      color-scheme:light;
+      --site-glass:transparent; --site-glass-strong:transparent;
+      --site-text:#17212b; --site-muted:#465464; --site-link:#174a98; --site-edge:#d2dbe3;
+      --ink-2:#303d49; --ink-3:#465464; --ok-ink:#195e36; --do-ink:#174a98;
+    }
+    html,body{background:#fff}
+  }
+
   @media (max-width: 900px){
-    .stage{--stage-top:10px; --stage-side:8px; --stage-bottom:10px}
+    .stage{--stage-top:10px; --stage-side:8px; --stage-bottom:14px}
     .screen{min-height:calc(100dvh - 20px)}
-    .screen{min-height:calc(100dvh - 20px - var(--site-safe-top) - var(--site-safe-bottom))}
-    .ocean-panel{min-height:210px}
+    .ocean-panel{min-height:195px}
     .nav .right{gap:8px}
     .search{width:36px; height:36px; padding:0; justify-content:center}
-    .search .search-label, .search .kbd{display:none}
+    .search .search-label, .search .kbd, .nav .logo .sub{display:none}
     .icon-btn{width:36px; height:36px}
-    .ov-list{max-height:min(392px, 55dvh)}
     .nav{height:56px; padding:0 16px; gap:8px}
     .nav .logo{font-size:var(--fs-md)}
     .nav .logo .mark{width:24px;height:24px;font-size:11px;border-radius:7px}
@@ -467,32 +395,22 @@
     .side{
       position:fixed; inset:0 auto 0 0; z-index:80; width:min(286px, 85vw); transform:translateX(-100%);
       transition:transform .22s var(--ease); box-shadow:var(--sh-3); overflow:auto;
+      background:rgba(12,15,22,.94);
       padding-top:calc(22px + var(--site-safe-top));
       padding-bottom:calc(22px + var(--site-safe-bottom));
       padding-left:calc(18px + var(--site-safe-left));
     }
     body.drawer-open .side{transform:translateX(0)}
-    body.drawer-open .scrim{display:block; position:fixed; inset:0; background:rgba(13,16,22,.15); z-index:70}
-    .main{padding:20px 18px 30px; gap:13px}
+    body.drawer-open .scrim{display:block; position:fixed; inset:0; background:rgba(8,10,16,.52); z-index:70}
+    .main{padding:20px 16px 28px; gap:14px}
     h1.page{font-size:var(--fs-xl)}
-    .btn{width:100%; min-width:0; height:46px}
-    .btns{flex-direction:column; gap:10px}
-    .foot{height:auto; padding:14px 18px; gap:10px}
-    .hero{flex-direction:column; gap:26px}
-    .hero .left{width:auto; gap:14px}
-    .name{font-size:36px}
+    .hero{flex-direction:column; gap:24px}
+    .name{font-size:32px}
     .direction{font-size:var(--fs-md)}
-    .focus{font-size:var(--fs-base)}
     .stat-row{gap:8px}
-    .stat{padding:11px 12px}
+    .stat{padding:10px 11px}
     .stat .v{font-size:var(--fs-xl)}
-    .contact{font-size:var(--fs-xs)}
-    .nf .big{font-size:72px}
-  }
-  @media (max-width: 360px){
-    .nav .logo{font-size:var(--fs-sm)}
-    .nav .logo .mark{display:none}
-    .stat{padding:9px 7px}
+    .foot{padding:14px 18px; gap:10px}
   }
 </style>
 <script defer src="./assets/js/binary-ocean.js"></script>
@@ -506,7 +424,7 @@
   <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
   <symbol id="ic-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
   <symbol id="ic-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
-  <symbol id="ic-check-sm" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-width="3"/></symbol>
+  <symbol id="ic-check-sm" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-width="2.6"/></symbol>
   <symbol id="ic-arrow-r" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></symbol>
   <symbol id="ic-arrow-l" viewBox="0 0 24 24"><path d="M19 12H6M11 18l-6-6 6-6"/></symbol>
   <symbol id="ic-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
@@ -517,26 +435,38 @@
   <symbol id="ic-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
   <symbol id="ic-map" viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></symbol>
   <symbol id="ic-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></symbol>
-  <symbol id="ic-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
   <symbol id="ic-alert" viewBox="0 0 24 24"><path d="M12 3.5L1.8 20.5h20.4z"/><path d="M12 10v4.5M12 17.6v.4"/></symbol>
   <symbol id="ic-inbox" viewBox="0 0 24 24"><path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M4.5 5.5h15l1.5 7.5v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4z"/></symbol>
   <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></symbol>
   <symbol id="ic-term" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l2.5 2.5L7 14M12.5 14h4"/></symbol>
   <symbol id="ic-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.4"/></symbol>
   <symbol id="ic-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.6" cy="6" r="1.2"/><circle cx="3.6" cy="12" r="1.2"/><circle cx="3.6" cy="18" r="1.2"/></symbol>
+  <symbol id="ic-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 16l.9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9L19 16z"/></symbol>
+  <symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3.5 8.2-7 9.5C8.5 20.2 5 17 5 12V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="ic-wave" viewBox="0 0 24 24"><path d="M3 12h2.5l2-5 3 10 3-12 2.5 9 2-2H21"/></symbol>
+  <symbol id="ic-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.8 10.6c.7.6 1.3 1.5 1.5 2.4h4.6c.2-.9.8-1.8 1.5-2.4A6 6 0 0 0 12 3z"/></symbol>
+  <symbol id="ic-sliders" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="10" cy="18" r="2"/></symbol>
+  <symbol id="ic-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5"/><path d="M4 19h16"/></symbol>
+  <symbol id="ic-eye" viewBox="0 0 24 24"><path d="M2 12s3.8-6.5 10-6.5S22 12 22 12s-3.8 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+  <symbol id="ic-play" viewBox="0 0 24 24"><path d="M8 5.5l11 6.5-11 6.5z"/></symbol>
+  <symbol id="ic-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+  <symbol id="ic-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0 2 5.3"/><path d="M20 4v7h-7"/></symbol>
+  <symbol id="ic-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="M21 15l-4.5-4.5L7 20"/></symbol>
+  <symbol id="ic-layers" viewBox="0 0 24 24"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M3 12l9 4.5 9-4.5M3 16.5L12 21l9-4.5"/></symbol>
 </svg>
 
-<!-- ============ 画布 ============ -->
+<!-- ============ 主画布 ============ -->
 <div class="stage">
   <div class="screen" id="screen">
-    <div class="demo-notice" id="demoNotice" hidden>示例预览 · 笔记、实验数据与进度仅用于演示。 <a href="./#/">返回学习档案</a></div>
     <!-- 顶部导航 -->
     <nav class="nav">
-      <a class="logo clickable" href="#/" data-go="home"><span class="mark">AI</span>学习档案</a>
+      <a class="logo clickable" href="#/" data-go="home">
+        <span class="mark">LK</span>LiteKit<span class="sub">· 数字实验室</span>
+      </a>
       <div class="links" id="navLinks"></div>
       <div class="right">
-        <button class="search clickable" id="searchBtn" aria-label="站内搜索">
-          <svg class="ic sm"><use href="#ic-search"/></svg><span class="search-label">站内搜索…</span>
+        <button class="search clickable" id="searchBtn" aria-label="搜索工具或复盘">
+          <svg class="ic sm"><use href="#ic-search"/></svg><span class="search-label">搜工具、痛点或复盘…</span>
           <span class="kbd">⌘K</span>
         </button>
         <button class="icon-btn ocean-toggle" id="ocean-toggle" type="button" hidden aria-label="暂停背景动画">
@@ -551,910 +481,697 @@
       <aside class="side" id="side"></aside>
       <div class="scrim" id="scrim"></div>
       <main class="main" id="main">
-        <noscript>请启用 JavaScript 以浏览学习档案。<a href="./resume/">查看技术概览</a> · <a href="./about/">关于本站</a></noscript>
+        <noscript>请启用 JavaScript 以体验交互式作品集。<a href="./resume/">查看能力概览</a> · <a href="./about/">关于本站</a></noscript>
       </main>
     </div>
 
     <footer class="foot">
-      <a class="fi" href="./resume/"><svg class="ic sm"><use href="#ic-file"/></svg>技术概览</a>
-      <a class="fi" href="./about/"><svg class="ic sm"><use href="#ic-info"/></svg>关于本站</a>
-      <a class="fi" id="demoLink" href="./?view=demo#/">查看示例</a>
+      <div class="foot-left">
+        <a class="fi clickable" data-go="works"><svg class="ic sm"><use href="#ic-layers"/></svg>在线作品集 (4)</a>
+        <a class="fi clickable" data-go="notes"><svg class="ic sm"><use href="#ic-bulb"/></svg>产品设计复盘 (4)</a>
+        <a class="fi" href="./resume/"><svg class="ic sm"><use href="#ic-file"/></svg>能力概览</a>
+        <a class="fi" href="./about/"><svg class="ic sm"><use href="#ic-info"/></svg>关于本站</a>
+      </div>
+      <div class="foot-right">
+        <span style="font-size:var(--fs-xs);color:var(--ink-4);display:inline-flex;align-items:center;gap:6px">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--ok-dot)"></span>纯浏览器本地运行 · 0 字节数据上传
+        </span>
+      </div>
     </footer>
   </div>
 </div>
 
-<!-- ============ 搜索层 ============ -->
+<!-- ============ 全局搜索层 ============ -->
 <div class="overlay" id="overlay">
-  <div class="ov-box" role="dialog" aria-modal="true" aria-label="站内搜索">
+  <div class="ov-box" role="dialog" aria-modal="true" aria-label="全局站内搜索">
     <div class="ov-top">
       <svg class="ic"><use href="#ic-search"/></svg>
-      <input id="q" placeholder="搜索主题、笔记或实验…" aria-label="搜索关键词" autocomplete="off" />
+      <input id="q" placeholder="搜索工具（水印、压缩、排版、卡片、白噪音）或产品复盘…" aria-label="搜索关键词" autocomplete="off" />
       <span class="esc">ESC</span>
     </div>
     <div class="ov-list" id="ovList"></div>
     <div class="ov-foot">
-      <span><svg class="ic sm"><use href="#ic-check-sm"/></svg>Enter 打开</span>
-      <span>↑ ↓ 切换</span>
+      <span><svg class="ic sm"><use href="#ic-check-sm"/></svg>Enter 立即打开</span>
+      <span>↑ ↓ 键盘切换</span>
     </div>
   </div>
 </div>
 
+<script src="./assets/js/tools-suite.js"></script>
 <script>
-/* ================= 图标助手 ================= */
+/* ================= 辅助函数 ================= */
 const ic = (n, cls)=>`<svg class="ic ${cls||''}" aria-hidden="true"><use href="#ic-${n}"/></svg>`;
 const escHtml = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-/* ================= 数据 ================= */
-const STAGES = [
-  {id:'c', name:'阶段 1 · C 语言', status:'done',
-   goal:'把 C 从「能写」练到「出错能自己收场」。',
-   criteria:['不用 IDE 调试器，纯 printf 定位出 3 类内存错误（越界写、野指针、使用未初始化值）',
-             '手写 Makefile 管理 ≥5 个源文件的多目标构建，支持 make / make clean / make test',
-             '能用 Valgrind 或 AddressSanitizer 找出泄漏并给出修复前后对照'],
-   links:['note'], labLinks:['lab']},
-  {id:'os', name:'阶段 2 · 计算机基础', status:'done',
-   goal:'看得懂编译器到底把我的 C 变成了什么。',
-   criteria:['画出一次函数调用过程中栈帧的完整变化，逐步解释 %rsp / %rbp 的每一次移动',
-             '用 objdump -d 反汇编，指出某条 C 语句对应的汇编指令区间',
-             '解释一次函数调用的缓存命中/缺失，并给出能被 perf stat 证伪或证实的预测'],
-   links:['note'], labLinks:[]},
-  {id:'algo', name:'阶段 3 · 数据结构与算法', status:'doing',
-   goal:'够用的熟练度，不过度投入。',
-   criteria:['LeetCode Hot 100 完成 ≥80 题，且能在白板上不依赖补全写出其中任意 20 题',
-             '实现并自测一个支持删除任意节点、带哨兵的双向链表，附带测试用例',
-             '能手写一个堆并证明其插入/弹出的复杂度'],
-   links:[], labLinks:[], empty:'该分支尚未开始，计划 2027-01 启动'},
-  {id:'parallel', name:'阶段 4 · C++ 与并行 / CUDA', status:'doing',
-   goal:'这条是主战场，占全部精力的一半以上。',
-   criteria:['用 RAII 手写一个资源管理类，在 AddressSanitizer 下零泄漏',
-             '写出访存合并的矩阵乘法，在目标 GPU 上给出 GFLOPS 数值与 roofline 上的位置',
-             '用 perf stat 证明一次 false sharing 的存在，并通过 padding/对齐消除它，给出前后数据',
-             '解释清楚 warp divergence 的产生条件，并写一个能触发它的最小 kernel'],
-   links:['note'], labLinks:['lab'], current:true},
-  {id:'ml', name:'阶段 5 · 机器学习', status:'todo',
-   goal:'理解模型训练和推理过程，练习定位性能瓶颈。',
-   criteria:['不依赖任何框架，手写一个含反向传播的全连接网络，在 MNIST 上准确率 ≥95%',
-             '解释清反向传播的矩阵维度推导，能手推一层的梯度',
-             '能说出一个训练过程中的性能瓶颈在哪，并给出优化思路'],
-   links:[], labLinks:[], empty:'该分支尚未开始，计划 2027-03 启动'},
-  {id:'platform', name:'阶段 6 · 平台工程', status:'todo',
-   goal:'让「跑起来」这件事不依赖我本人在场。',
-   criteria:['把一个 C++ 服务容器化：Dockerfile + Makefile + 健康检查，别人一条命令能跑起来',
-             '为一个项目配好 CI：push 后自动编译、跑测试、产出可执行文件',
-             '能用 perf / flamegraph 定位一次线上性能问题的热点函数'],
-   links:[], labLinks:[], empty:'该分支尚未开始，计划 2027-06 启动'}
-];
-
-const STAT = {done:'已完成', doing:'进行中', todo:'未开始'};
-const STAT_TAG = {done:'done', doing:'doing', todo:'todo'};
-/* 阶段名 ↔ 侧栏 key 双向映射（避免各处硬编码） */
-const STAGE_KEY  = {'阶段 1':'c', '阶段 2':'os', '阶段 3':'algo', '阶段 4':'parallel', '阶段 5':'ml', '阶段 6':'platform'};
-const STAGE_NAME = Object.fromEntries(Object.entries(STAGE_KEY).map(([k, v]) => [v, k]));
-
-const NOTES = [
-  {slug:'why-padding-3x', topic:'C++ / 并行 / CUDA', stage:'阶段 4',
-   title:'给两个线程的变量加 padding，为什么快了 3 倍',
-   date:'2026-11-01', status:'verified', statusText:'已验证',
-   tags:['cache-line','false-sharing','pthreads'], lab:'L-002',
-   segs:[
-     ['① 一句话结论','不可缺','padding 让两个线程不再抢同一条 cache line，耗时从 1180ms 降到 372ms。'],
-     ['② 我以为','不可缺','我原以为只是多占了 56 字节内存，对齐这点小事，对性能的影响应该可以忽略。'],
-     ['③ 它实际是','可缺','cache line 是 64 字节。两个变量挤在同一条 line 里，两个核心各自写自己的变量，却会让对方的整条 line 失效（MESI），形成无效化风暴。'],
-     ['④ 实测','可缺','对照组 1180 ms，实验组 372 ms，加速 3.17x。详见 Lab L-002 的原始输出块。'],
-     ['⑤ 为什么','可缺','每次写都要把对方的 cache line 抢过来，写入从一个 L1 操作退化成一次跨核一致性流量。padding 之后两条变量落在不同 line，写各自独立。'],
-     ['⑥ 还不懂','不可缺','第 3 次跑为什么波动到 380ms？我怀疑是后台任务，但没验证，也没查清楚 perf 为什么在 WSL 里拿不到 cache-misses。']
-   ]},
-  {slug:'pointer-and-array', topic:'C 语言', stage:'阶段 1',
-   title:'指针与数组的最后一层窗户纸',
-   date:'2026-10-19', status:'verified', statusText:'已验证',
-   tags:['pointer','array'], lab:null,
-   segs:[
-     ['① 一句话结论','不可缺','数组名不是指针，它只是在这个上下文里退化成了指向首元素的指针。'],
-     ['② 我以为','可缺','我以为 sizeof(arr) 和 sizeof(p) 一样，因为「数组就是指针」。'],
-     ['③ 它实际是','可缺','sizeof(p) 是指针宽度（8 字节），sizeof(arr) 是整体字节数；&arr 与 arr 类型也不同。'],
-     ['④ 实测','可缺','无 Lab（本条不计入 UE 的 B 条件）。'],
-     ['⑤ 为什么','可缺','数组类型在表达式中退化，但 sizeof 和 & 属于保留数组类型的例外上下文。'],
-     ['⑥ 还不懂','不可缺','函数参数里的 int a[] 为什么等于 int *a，编译器为什么不报警？']
-   ]},
-  {slug:'stack-frame-rsp', topic:'计算机基础', stage:'阶段 2',
-   title:'栈帧里 %rsp 到底怎么动',
-   date:'2026-10-12', status:'partial', statusText:'部分验证',
-   tags:['stack','asm'], lab:null,
-   segs:[
-     ['① 一句话结论','不可缺','call 压返回地址，push rbp 建帧，sub rsp 开局部变量空间——三步。'],
-     ['② 我以为','可缺','我以为 %rbp 是不动的，%rsp 只在上层变化。'],
-     ['③ 它实际是','可缺','函数体内 %rbp 固定，%rsp 随 push/pop 上下移动。'],
-     ['④ 实测','可缺','用 objdump 看过，但还没整理成表格。'],
-     ['⑤ 为什么','可缺','占位。'],
-     ['⑥ 还不懂','不可缺','红区（red zone）具体在什么编译条件下才会被用上？']
-   ]},
-  {slug:'what-is-cache-line', topic:'C++ / 并行 / CUDA', stage:'阶段 4',
-   title:'cache line 到底装了多少东西？', date:'2026-10-08', status:'draft', statusText:'草稿',
-   tags:['cache'], lab:null,
-   segs:[
-     ['① 一句话结论','不可缺','（草稿）64 字节，但还没搞清 L1/L2 的 line 是否一致。'],
-     ['② 我以为','不可缺','（草稿）我以为只有一个层级有 line。'],
-     ['③ 它实际是','可缺','待填。'],
-     ['④ 实测','可缺','待填。'],
-     ['⑤ 为什么','可缺','待填。'],
-     ['⑥ 还不懂','不可缺','L1 和 L2 的 line 大小相同时，为什么命中率差异还这么大？']
-   ]}
-];
-
-const LABS = [
-  {id:'L-002', slug:'002-false-sharing', title:'False sharing：两个线程写同一 cache line',
-   date:'2026-10-26', status:'done', statusText:'已完成', factor:'3.17x',
-   topic:'C++ / 并行 / CUDA', note:'why-padding-3x',
-   summary:'两个线程写同一 cache line，加 padding 后快 3.17 倍',
-   env:['AMD Ryzen 7 5800H @ 3.2GHz（未固定频率）','WSL2 / Linux 5.15.90','GCC 13.2 -O2','8 逻辑核心'],
-   honest:'未固定频率，以下数据仅供趋势参考。',
-   hypothesis:'我预期加 padding 后快 2~4 倍。',
-   measurement:'clock_gettime 取 user time ｜ 每组 ≥3 次取中位数 ｜ 单位 ms（越小越好）',
-   cmd:'$ gcc -O2 -o bench bench.c\n$ ./bench',
-   rows:[['对照组（无 padding）','1180','1210','1150','1180','1.00x'],
-         ['实验组（padding 64B）','372','365','380','372','3.17x']],
-   raw:'$ ./bench\n[control]  1180 ms\n[padded ]   372 ms\nrepeat 2/3 done, median reported',
-   conclusion:'支持假设，假共享确实吃掉约 3.2 倍；第 3 次波动我怀疑来自同机后台任务，还没验证。',
-   fixedFreq:false},
-  {id:'L-001', slug:'001-row-vs-col', title:'行优先 vs 列优先遍历二维数组', date:'2026-10-12',
-   status:'done', statusText:'已完成', factor:'6.4x', topic:'C 语言', note:'pointer-and-array',
-   summary:'仅改遍历顺序，同一份数据耗时差 6.44 倍',
-   env:['AMD Ryzen 7 5800H @ 3.2GHz（未固定频率）','WSL2 / Linux 5.15.90','GCC 13.2 -O2','8 逻辑核心'],
-   honest:'未固定频率，以下数据仅供趋势参考。',
-   hypothesis:'我预期列优先会慢，但没想到差这么多。',
-   measurement:'perf stat -e cache-misses,cache-references ｜ 取 user time ｜ 单位 ms',
-   cmd:'$ gcc -O2 -o bench bench.c\n$ perf stat -e cache-misses,cache-references ./bench',
-   rows:[['行优先 a[i][j]','98','101','96','98','1.00x'],
-         ['列优先 a[j][i]','631','628','640','631','6.44x']],
-   raw:'$ perf stat -e cache-misses,cache-references ./bench\n   1,204,331      cache-misses\n  18,332,004      cache-references',
-   conclusion:'支持假设。差的不是指令数，是缓存行利用率。',
-   fixedFreq:false},
-  {id:'L-005', slug:'005-branch-predict', title:'排序 vs 未排序数据的分支跳转开销', date:'2026-11-02',
-   status:'pending', statusText:'数据待补', factor:'待补', topic:'C++ / 并行 / CUDA', note:null,
-   summary:'数据待补，结论暂写「未观察到差异」',
-   env:['待填（未跑）','','',''],
-   honest:'数据尚未跑出，本条标注为「数据待补」，仍允许发布。',
-   hypothesis:'我预期未排序数据慢 2 倍以上，因为分支预测失败率高。',
-   measurement:'待填',
-   cmd:'$ gcc -O2 -o bench bench.c && ./bench',
-   rows:[['对照组','—','—','—','—','—'],['实验组','—','—','—','—','—']],
-   raw:'（待补：跑完把终端原文整段贴进来）',
-   conclusion:'暂未观察到差异，原始数据待补。按规则：失败的实验也算一个 Lab。',
-   fixedFreq:false}
-];
-
-const NOW = {
-  focus:'把 false sharing 的实验数据补完，并把 Roadmap 阶段 4 标成「进行中」。',
-  blocker:'WSL 里 perf 拿不到 cache-misses，先降级用 clock_gettime，已在环境字段写明。',
-  date:'2026-11-01', streak:7, silent:false,
-  recent:[['笔记','给两个线程的变量加 padding，为什么快了 3 倍','2026-11-01','note','why-padding-3x','doc'],
-          ['实验','L-002 False sharing','2026-10-26','lab','L-002','flask'],
-          ['笔记','指针与数组的最后一层窗户纸','2026-10-19','note','pointer-and-array','doc']]
-};
-
-/* ============================================================================
-   真实站点数据 —— 同步自 learning-notes/src/content/docs/
-   与上面的示例数据并存，由 SRC 开关切换，互不影响。
-   注意：真实站点 7 个分支目前**全部为空**（只有收录目标 / 启动计划 / 选题候选），
-   尚无 1 篇笔记正文、尚无 1 个已完成的实验 —— 这就是冷启动的真实状态。
-   ============================================================================ */
-const REAL = {
-  stats:{notes:0, labs:0, streak:0},
-  branches:[
-    {id:'c', name:'C 语言', desc:'指针、内存布局、编译链接——所有后来踩的坑，根都在这层',
-     aim:'不是语法笔记，而是「当初以为懂了、后来在别的层被推翻」的那些概念。',
-     plan:'2026-11',
-     cand:['指针与数组：在表达式层、参数层、汇编层分别是不是一回事',
-           '结构体为什么会变大：对齐规则与 padding 的实证验证',
-           'sizeof 一个数组参数为什么退化成指针大小',
-           '一个未初始化变量的读取，编译优化前后结果为什么不同']},
-    {id:'os', name:'操作系统与系统基础', desc:'进程/线程、虚拟内存、系统调用、ELF、工具链',
-     aim:'把「程序跑起来到底发生了什么」这条链路拆到能自己复述的程度。',
-     plan:'2026-12',
-     cand:['main 之前：谁调用的它，argc/argv 从哪来',
-           '动态链接延迟绑定（PLT/GOT）的一次实地观察',
-           '一次 mmap 与 malloc 大块分配的关系']},
-    {id:'ds-algo', name:'数据结构与算法', desc:'够用即可，过关即止',
-     aim:'只记「在实现过程中真实出错的地方」，不记录标准解法。定位是过关，不是精进。',
-     plan:'2026-12',
-     cand:['带哨兵的双向链表：为什么哨兵能让删除逻辑少一半分支',
-           '堆的数组下标为什么从 1 开始更省事（以及它的代价）',
-           '一道题的两种复杂度写法，以及实测的时间差异']},
-    {id:'cpp', name:'C++ 与并行', desc:'RAII、移动语义、内存序、线程池、无锁结构',
-     aim:'C++ 的每一条设计，都要能回答「它解决了 C 里的哪个具体问题」。回答不上来的，说明还没真懂。',
-     plan:'2027-01',
-     cand:['std::move 到底做了什么（提示：什么都不移动）',
-           'memory_order_relaxed 能用在哪些地方，以及会怎么炸',
-           '手写一个线程池：从「能跑」到「能优雅退出」']},
-    {id:'parallel-cuda', name:'并行与 CUDA', desc:'主战场：访存合并、共享内存、warp、roofline',
-     aim:'这个分支的每一篇笔记，都应该配一个对应的实验。只讲原理不贴数据的，不许进这个分支。',
-     plan:'2027-01', main:true,
-     cand:['行优先 vs 列优先遍历二维数组的耗时差（建议第一篇）',
-           'false sharing：用 padding 消除，perf 给证据',
-           '-O0 / -O2 下同一循环的性能差异与原因',
-           '缓存行大小是 64B 这件事，怎么用实验证明',
-           '循环展开（unroll）什么时候反而变慢',
-           '分支预测：给数组排序后再遍历，为什么会更快',
-           'AoS vs SoA：结构体数组与数组结构体的访存差异',
-           '多线程累加：原子变量 vs 局部累加的性能对比',
-           '页表/缺页：首次访问大数组的额外开销',
-           '用 perf stat 完整统计 L1/L2/LLC 三级命中率']},
-    {id:'ml', name:'机器学习', desc:'够用即可，只求能读懂、能跑、能定位瓶颈',
-     aim:'站在「我要给训练过程提速」的视角学 ML，而不是「我要发论文」的视角。',
-     plan:'2027-03',
-     cand:['一层全连接网络的梯度，手推一遍（不用任何框架）',
-           'batch size 变化时，训练耗时为什么不线性变化',
-           '推理瓶颈：这是计算受限还是带宽受限']},
-    {id:'work', name:'工作复盘', desc:'工作中遇到的真实系统问题，脱敏后记录',
-     aim:'从每天真实发生的系统问题里提炼通用的原理。这类笔记价值不在于量大，而在于能证明「我在生产环境里真的 debug 过」。',
-     plan:'2026-11',
-     desens:['代码：不得粘贴公司源码，改写成最小复现代码',
-             '日志：路径、IP、主机名、服务名、业务 ID 全部替换或删除',
-             '架构：不描述内部系统拓扑、不透露业务流程细节',
-             '数据：不出现任何真实业务数据、用户信息、量级指标',
-             '可识别性：同事看到这篇能否猜出是哪个具体故障？能，就再脱一层'],
-     cand:['一次栈溢出 / 内存踩踏的定位过程：从现象反推到哪一行',
-           '多线程环境下的偶现问题：如何把「偶现」变成「必现」',
-           '一次编译/链接层面的疑难：符号冲突、ABI 不一致',
-           '资源没有释放导致的累积泄漏：怎么在使用一段时间后才能观察到']}
-  ],
-  /* Labs 四条数据硬规则 */
-  labRules:[
-    ['有对照','必须有「优化前 vs 优化后」，不能只有一个孤零零的数字'],
-    ['有重复','每组 ≥3 次，取中位数（不是最大值，不是算平均值糊弄）'],
-    ['有单位与测量方法','写清单位（ms / ns / GFLOPS）、测量工具（perf stat / clock_gettime）、编译器版本与编译选项'],
-    ['有原始输出原文块','必须贴工具输出的原文代码块，不能只贴自己整理过的表格']
-  ],
-  labHonest:'如果没有固定 CPU 频率、没有关 turbo/睿频，必须在实验开头写明「数据仅供趋势参考」。把不确定性写出来，恰恰是专业性的体现。',
-  /* Labs 选题池（CPU 侧 10 个，按成本从低到高） */
-  labPool:[
-    ['1','行优先 vs 列优先遍历二维数组的耗时差','极低','缓存行、空间局部性',true],
-    ['2','false sharing：两线程改同一缓存行的相邻变量','低','缓存一致性、padding'],
-    ['3','证明缓存行是 64B：按不同 stride 遍历同一数组','低','缓存行大小的实证方法'],
-    ['4','排序后再分支：随机数组 vs 有序数组的分支预测开销','低','分支预测器'],
-    ['5','-O0 / -O2 下同一循环的性能差，及反汇编对照','中','编译器优化做了什么'],
-    ['6','AoS vs SoA：结构体数组与数组结构体的访存差异','中','数据布局'],
-    ['7','循环展开（unroll）何时反而变慢','中','指令级并行与寄存器压力'],
-    ['8','多线程累加：原子变量 vs 局部累加的性能对比','中','同步开销'],
-    ['9','首次访问大数组 vs 预热后的耗时差（缺页）','中','页表与缺页中断'],
-    ['10','用 perf stat 完整统计 L1/L2/LLC 三级命中率','中高','性能分析工具链']
-  ],
-  /* 真实 now.md：只有三个字段，且尚未填写 */
-  now:{focus:null, blocker:null, date:'2026-11-01',
-       why:'时间线文案最容易写成流水账，然后断更。把信息密度压到三个字段，「更新」这件事才有可执行性。'},
-  /* 真实 about.md */
-  about:{
-    lead:'本站记录 C/C++、CUDA 和 AI 基础设施相关的学习笔记与动手实验。笔记保留问题、验证过程和后续修订。',
-    principles:[
-      ['记录当时的理解，不做事后美化。','如果一周后发现自己错了，就在原文上追加「修正」，而不是悄悄改掉。'],
-      ['每一条性能结论都必须有测量方法和原始输出。','没有数据支撑的观点，我会明确标注为「推测」。'],
-      ['区分「测过」和「没测过」。','我不试图让人觉得我什么都懂，但我想让「哪部分是实测的」一目了然。'],
-      ['错了要看得见。','已修正的结论会在页面上留痕——这比「一直正确」更能说明我在真的学。']
-    ],
-    quote:'性能结论附上测试环境、测量方法、对照数据和原始输出，便于复现与比较。',
-    workLead:'这个分支用于记录实际遇到的系统问题、排查过程与可复用的方法。'
+/* ================= 产品复盘档案数据（4 篇完整 PM 拆解） ================= */
+const PM_NOTES = [
+  {
+    slug: 'cleanpaste-pm-review',
+    toolId: 'cleanpaste',
+    toolCode: 'TK-01',
+    topic: '文本工作流',
+    title: 'CleanPaste 复盘：为什么 AI 时代大家更需要一个「剪贴板净化器」？',
+    date: '2026-11-18',
+    readTime: '3 分钟阅读',
+    tags: ['高频痛点', '规则抽象', '零门槛体验'],
+    summary: '拆解 AI 对话与 PDF 文献复制粘贴场景中的格式污染问题，如何用 3 个场景预设替代繁琐的正则配置。',
+    segs: [
+      ['痛点现场：每天发生十几次的「微小抓狂」', '把大模型生成的回复直接粘到微信群、飞书文档或简历表格里，满屏都是 **加粗星号**、### 标题井号和多余空行；从 PDF 论文复制一段话，每一行末尾都被硬生生截断。单次手动删改只要 1 分钟，但高频重复极其消耗心流。'],
+      ['MVP 取舍：不做富文本编辑器，只做「3 秒过水净化站」', '市面上有很多重型 Markdown 编辑器，但用户此刻只想要「贴进来 → 变干净 → 粘出去」。因此我砍掉了账号保存、历史文档管理等冗余功能，聚焦左右双栏实时映射与一键复制闭环。'],
+      ['体验打磨：用「场景预设」替代技术术语', '普通用户并不理解什么是「去除 AST 标记」或「CJK 盘古之白」。我将底层 5 条文本清洗规则组合包装成 3 个直白按钮：【AI 回复转微信通知】、【PDF 文献断行修复】、【简历/周报规范化】，并保留独立开关满足进阶微调。'],
+      ['验证指标：让清理结果「可视化」', '如果右侧只是默默变了文字，用户很难一眼确认改了哪里。我在状态栏加入了等宽数字跳动反馈（如「已清除 14 处符号 · 合并 6 处断行 · 补齐 11 处中英空格」），赋予工具明确的确定感。']
+    ]
+  },
+  {
+    slug: 'snapcard-pm-review',
+    toolId: 'snapcard',
+    toolCode: 'TK-02',
+    topic: '视觉美化',
+    title: 'SnapCard 复盘：如何在「丑陋截图」与「重型设计软件」之间找到平衡？',
+    date: '2026-11-20',
+    readTime: '3 分钟阅读',
+    tags: ['Canvas 渲染', '审美克制', '社交传播'],
+    summary: '针对读书摘抄、灵感金句分享场景，通过约束式参数与 ==重点荧光笔== 语法实现 10 秒出图。',
+    segs: [
+      ['用户洞察：多数人不是不会排版，而是选择太多', '打开专业设计软件做一张文字卡片，往往在挑字体、调对齐上花掉 15 分钟。对于日常摘抄和想法分享，用户真正需要的是「无论怎么填字都不会丑」的约束式画布。'],
+      ['核心巧思：用 ==双等号== 实现一秒金句划线', '纯文字长图很容易缺乏视觉重心。我设计了直观的荧光笔标记交互——选中任意文字点击工具栏【标记重点】（或包裹双等号），Canvas 渲染层会自动在对应字词下方绘制半透明圆角荧光底色，瞬间拉高卡片的信息密度与传播欲。'],
+      ['多平台适配与高清导出', '不同社交平台对画幅比例极其敏感：小红书偏爱 3:4 竖版，公众号头图需要 16:9，朋友圈适合自适应或 1:1。内置一键比例切换与 2 倍设备像素比（Retina 2x）Canvas 渲染，确保导出的 PNG 在手机端放大依然锐利清晰。'],
+      ['自传播闭环设计', '卡片底部角标默认支持优雅的极简署名与站点水印开关，既满足创作者的版权归属感，也让导出的每张卡片成为个人作品集的自然名片。']
+    ]
+  },
+  {
+    slug: 'safepic-pm-review',
+    toolId: 'safepic',
+    toolCode: 'TK-03',
+    topic: '隐私与文件',
+    title: 'SafePic 复盘：把「离线隐私安全」与「网申 200KB 限制」做成救急闭环',
+    date: '2026-11-22',
+    readTime: '4 分钟阅读',
+    tags: ['隐私信任设计', '二分压缩算法', '校园与求职刚需'],
+    summary: '解决提交身份证/学生证不敢上传第三方网站的信任焦虑，并用二分搜索逼近目标 KB 大小。',
+    segs: [
+      ['信任痛点：工具好做，安全感难建', '租房、入职背调、网申报名都需要提交证件照片。给证件加满屏斜向防盗水印是刚需，但把身份证原图上传到不知名的在线水印网站本身就是巨大的隐私隐患。因此 SafePic 的第一产品原则是：100% 纯前端离线运行，0 字节网络请求。'],
+      ['换位思考：为没有测试图的访客准备「模拟校园卡样张」', '如果是 HR 或面试官点开这个作品，电脑桌面未必正好有一张证件照可传。为此我专门用 Canvas 程序化绘制了一张逼真的「示例数字证件样张」，点击一次按钮就能立即体验铺满水印与极限压缩的完整流程。'],
+      ['工程细节：目标 KB 二分逼近压缩', '传统压缩工具只提供模糊的「画质 0~100% 滑块」，用户面对网申系统「照片必须小于 200KB」的硬指标只能反复盲猜重试。SafePic 改为直接选择目标体积（如 ≤200KB、≤100KB），底层通过 7 轮 Blob 二分查找自动求解最佳 JPEG 质量参数与尺寸缩放比，一步到位。'],
+      ['组合增效：加完水印顺手压体积', '在实际求职网申流程中，「加防盗水印」和「压到指定 KB」往往前后脚发生。将两者整合在同一流水线内，省去了用户在两个工具间反复导出的摩擦。']
+    ]
+  },
+  {
+    slug: 'flowzone-pm-review',
+    toolId: 'flowzone',
+    toolCode: 'TK-04',
+    topic: '专注空间',
+    title: 'FlowZone 复盘：零外部音频依赖的程序化声景，以及全站视觉的灵魂联动',
+    date: '2026-11-25',
+    readTime: '4 分钟阅读',
+    tags: ['Web Audio 合成', '画中画 PiP', '情绪价值'],
+    summary: '如何用浏览器原生音频节点合成深海、夜雨与篝火声，并将网站的二进制鲨鱼背景升华为沉浸专注舱。',
+    segs: [
+      ['拒绝静态资源臃肿：Web Audio 实时程序化合成', '常规白噪音网站需要加载几十 MB 的循环 MP3 文件，不仅首屏慢，在弱网环境下还容易断流。FlowZone 直接基于 Web Audio API 的噪声缓冲区、双二阶滤波器（BiquadFilter）与低频振荡器（LFO），实时合成出深海潜流、窗外夜雨、壁炉篝火与 10Hz Alpha 专注波四条音轨，体积接近 0 KB 且永不重复机械循环。'],
+      ['化装饰为功能：联动全站二进制深海背景', '本站原本就有一块辨识度极高的 0/1 二进制游鱼画布。在设计 FlowZone 时，我加入了【开启深海全屏沉浸】模式——点击后导航与侧边栏自动隐去，深海游鱼浮上全屏，配合低频海浪声与中央悬浮毛玻璃计时舱，让原本纯装饰的背景真正成为了产品体验的一部分。'],
+      ['跨标签页痛点：浏览器画中画（PiP）悬浮窗', '网页番茄钟最大的短板是一旦切去查资料或写文档，倒计时就看不见了。借助现代浏览器的 Document Picture-in-Picture 能力（并为不支持的环境提供页内迷你浮窗降级），计时器能始终悬浮在桌面角落。'],
+      ['正向激励：用「心流小票」替代冰冷的统计表', '每次专注结束（同时提供了 10 秒快速演示按钮方便访客体验），系统会吐出一张带有锯齿边缘的拟物「心流结账单」，记录本次专注目标、环境音配方与累计时长，支持一键保存图片留念。']
+    ]
   }
-};
-
-/* ================= 路由 ================= */
-const NAV = [
-  {k:'now', t:'Now'}, {k:'roadmap', t:'Roadmap'}, {k:'notes', t:'Notes'}, {k:'labs', t:'Labs'}
 ];
-let route = {page:'home', params:{}};
-const SRC = new URLSearchParams(location.search).get('view') === 'demo' ? 'demo' : 'real';
 
-/* ---------------------------------------------------------------
-   URL 方案（单一数据源 = 地址栏 hash）
-     #/                     首页
-     #/roadmap #/now #/labs 门户页
-     #/notes                笔记索引（全部）
-     #/notes/<stage-key>    按阶段过滤，如 #/notes/parallel
-     #/note/<slug>          单篇笔记
-     #/labs                 实验索引
-     #/lab/<id>             实验详情，如 #/lab/L-002
-     #/404                  404
-   其它任何 hash → 解析失败 → 404
-   --------------------------------------------------------------- */
+/* ================= 四阶段造物路线图 ================= */
+const ROADMAP_STAGES = [
+  {
+    code: '01',
+    name: '阶段一 · 真实痛点捕捉与 MVP 减法定义',
+    status: 'done',
+    goal: '拒绝为了炫技而堆砌功能，从自己高频抓狂的日常小事里筛选出「30 秒能讲清价值」的切入点。',
+    criteria: [
+      '确立四条选题红线：高频刚需、免注册登录、单屏闭环操作、无服务端隐私泄露风险',
+      '针对每款工具输出痛点故事与功能边界清单，砍掉低频配置项，优先打磨核心主路径',
+      '为每个工具设计专属「一键填入示例 / 模拟样张」，确保访客空手点开也能在 5 秒内感知效果'
+    ],
+    toolLink: 'cleanpaste',
+    toolLabel: '查看 CleanPaste 落地方案'
+  },
+  {
+    code: '02',
+    name: '阶段二 · 统一暗黑毛玻璃视觉与设计语言',
+    status: 'done',
+    goal: '把零散小工具整合为具有品牌辨识度的 LiteKit 套件，统一色彩令牌、排版层级与键盘快捷交互。',
+    criteria: [
+      '基于 #0a0a0b 深海夜色底板、1px 半透明细边框与 #3157b6 钴蓝主色建立全局组件规范',
+      '统一数据反馈语言：体积变化、清理字数、倒计时全部采用等宽字体（Tabular Monospace）稳定对齐',
+      '实装全局 ⌘K / Ctrl+K 瞬时检索面板与移动端抽屉导航，桌面与手机端均可流畅操作'
+    ],
+    toolLink: 'snapcard',
+    toolLabel: '体验 SnapCard 视觉呈现'
+  },
+  {
+    code: '03',
+    name: '阶段三 · 纯浏览器原生引擎闭环研发',
+    status: 'done',
+    goal: '零外部重框架、零后端服务器依赖，充分挖掘现代浏览器原生 API 完成四款工具的核心技术闭环。',
+    criteria: [
+      '实现多模式文本排版清洗引擎（CleanPaste）与 Retina 2x 多主题荧光笔卡片渲染器（SnapCard）',
+      '攻克离线防盗斜向水印绘制与目标 KB 二分搜索图像压缩算法（SafePic），兑现 0 字节上传承诺',
+      '基于 Web Audio API 程序化合成四轨环境白噪音，并打通二进制深海背景全屏沉浸联动（FlowZone）'
+    ],
+    toolLink: 'safepic',
+    toolLabel: '测试 SafePic 离线引擎'
+  },
+  {
+    code: '04',
+    name: '阶段四 · 体验走查、产品复盘沉淀与持续演进',
+    status: 'doing',
+    current: true,
+    goal: '以真实用户与面试官双重视角审视每一个边缘状态，将迭代思考沉淀为可复用的产品档案。',
+    criteria: [
+      '为四款工具全部补齐内嵌式「💡 PM 产品思考卡」与独立深度复盘长文，形成「产品体验 + 思考过程」双闭环',
+      '完善剪贴板权限降级、画中画 API 兼容性兜底与 prefers-reduced-motion 减弱动态效果无障碍支持',
+      '持续收集真实使用反馈，规划下一批轻量工具（如本地 JSON/表格互转器、极简快捷键速查卡）'
+    ],
+    toolLink: 'flowzone',
+    toolLabel: '进入 FlowZone 沉浸舱'
+  }
+];
+
+/* ================= 路由配置 ================= */
+const NAV = [
+  {k:'home', t:'首页'},
+  {k:'works', t:'作品集 · Works'},
+  {k:'notes', t:'产品复盘 · Notes'},
+  {k:'roadmap', t:'造物路线 · Roadmap'},
+  {k:'about', t:'关于 · About'}
+];
+
+let route = {page:'home', params:{}};
+let worksFilter = 'all';
+
 function buildHash(r){
   const p = r.page, q = r.params || {};
   switch(p){
     case 'home':    return '#/';
+    case 'works':
+    case 'labs':    return '#/works';
+    case 'tool':    return `#/tool/${q.id || 'cleanpaste'}`;
+    case 'notes':   return q.cat ? `#/notes/${encodeURIComponent(q.cat)}` : '#/notes';
+    case 'note':    return `#/note/${q.slug || 'cleanpaste-pm-review'}`;
     case 'roadmap': return '#/roadmap';
     case 'now':     return '#/now';
-    case 'labs':    return '#/labs';
-    case 'notes':   return q.cat ? `#/notes/${q.cat}` : '#/notes';
-    case 'note':    return `#/note/${q.slug || 'why-padding-3x'}`;
-    case 'lab':     return `#/lab/${q.id || 'L-002'}`;
     case 'about':   return '#/about';
     default:        return '#/404';
   }
 }
+
 function parseHash(h){
   const s = (h || '').replace(/^#/, '');
   if(!s || s === '/') return {page:'home', params:{}};
   let m;
-  if((m = s.match(/^\/notes\/([a-z0-9-]+)$/i)))  return {page:'notes', params:{cat:m[1]}};
-  if((m = s.match(/^\/note\/([a-z0-9-]+)$/i)))   return {page:'note',  params:{slug:m[1]}};
-  if((m = s.match(/^\/lab\/([A-Za-z0-9-]+)$/i))) return {page:'lab',   params:{id:m[1]}};
+  if((m = s.match(/^\/tool\/([a-z0-9-]+)$/i))) return {page:'tool', params:{id:m[1].toLowerCase()}};
+  if((m = s.match(/^\/lab\/([a-z0-9-]+)$/i)))  return {page:'tool', params:{id:m[1].toLowerCase()}};
+  if((m = s.match(/^\/notes\/([^/]+)$/i)))     return {page:'notes', params:{cat:decodeURIComponent(m[1])}};
+  if((m = s.match(/^\/note\/([a-z0-9-]+)$/i))) return {page:'note', params:{slug:m[1]}};
+  if(s === '/works' || s === '/labs') return {page:'works', params:{}};
   if(s === '/notes')   return {page:'notes', params:{}};
-  if(s === '/labs')    return {page:'labs',  params:{}};
   if(s === '/roadmap') return {page:'roadmap', params:{}};
   if(s === '/now')     return {page:'now', params:{}};
   if(s === '/about')   return {page:'about', params:{}};
   if(s === '/404')     return {page:'404', params:{}};
-  return {page:'404', params:{}, bad:'#' + s};      // 无法解析 → 404
+  return {page:'404', params:{}, bad:'#' + s};
 }
-/* 用于幂等判断：同一地址不重复渲染 */
+
 const routeKey = r => r.page + '|' +
   (((r.params && (r.params.slug || r.params.id || r.params.cat)) || '')) + '|' + (r.bad || '');
+
+const TITLE = {
+  home:'首页',
+  works:'作品集 · LiteKit 效率四件套',
+  notes:'产品复盘 · 痛点拆解与迭代思考',
+  roadmap:'造物路线 · 从痛点到上线',
+  now:'Now · 近期迭代动态',
+  about:'About · 关于本站与造物原则',
+  '404':'页面未找到'
+};
+
+function pageTitle(){
+  if(route.page === 'tool' && window.LiteKitTools){
+    const t = window.LiteKitTools.getTool(route.params.id);
+    return t ? `${t.name} · ${t.cnName}` : '404';
+  }
+  if(route.page === 'note'){
+    const n = PM_NOTES.find(x=>x.slug===route.params.slug);
+    return n ? n.title : '404';
+  }
+  return TITLE[route.page] || '404';
+}
 
 function applyRoute(r, scroll){
   route = r;
   closeSearch();
   setDrawer(false);
   render();
-  document.title = pageTitle() + ' · AI Infra 学习档案';
+  document.title = pageTitle() + ' · LiteKit 个人数字实验室';
   if(scroll !== false) window.scrollTo({top:0, behavior:'auto'});
 }
+
 function go(page, params){
   const h = buildHash({page, params: params || {}});
-  if(location.hash === h) applyRoute(parseHash(h));  // 同址点击也要重绘
-  else location.hash = h;                             // 交给 hashchange 统一渲染
+  if(location.hash === h) applyRoute(parseHash(h));
+  else location.hash = h;
 }
+
 window.addEventListener('hashchange', ()=>{
   const next = parseHash(location.hash);
-  if(routeKey(next) === routeKey(route)) return;     // 幂等：避免自己写 hash 时重复渲染
+  if(routeKey(next) === routeKey(route)) return;
   applyRoute(next);
 });
-/* 页面标题跟随路由（真实站点行为，便于区分浏览器标签页） */
-const TITLE = {home:'首页', roadmap:'Roadmap · 六阶段学习路线', notes:'Notes · 笔记档案',
-               labs:'Labs · 动手实验', now:'Now · 现在在做什么', about:'About · 关于本站', '404':'404'};
-function pageTitle(){
-  if(route.page === 'note'){
-    const n = SRC === 'demo' && NOTES.find(x=>x.slug===route.params.slug);
-    return n ? n.title : '404';
-  }
-  if(route.page === 'lab'){
-    const l = SRC === 'demo' && LABS.find(x=>x.id===route.params.id);
-    return l ? l.id+' '+l.title : '404';
-  }
-  return TITLE[route.page] || '404';
-}
-/* 给 <a data-go> 注入真实 href：支持右键「在新标签打开」与爬虫抓取 */
+
 function decorateLinks(root){
   if(!root || !root.querySelectorAll) return;
   root.querySelectorAll('[data-go]').forEach(el=>{
     if(el.tagName !== 'A') return;
     const params = {};
-    if(el.dataset.slug)  params.slug  = el.dataset.slug;
-    if(el.dataset.id)    params.id    = el.dataset.id;
-    if(el.dataset.cat) params.cat = el.dataset.cat;
+    if(el.dataset.slug) params.slug = el.dataset.slug;
+    if(el.dataset.id)   params.id   = el.dataset.id;
+    if(el.dataset.cat)  params.cat  = el.dataset.cat;
     el.setAttribute('href', buildHash({page: el.dataset.go, params}));
   });
 }
 
-/* ================= 侧栏 ================= */
+/* ================= 导航与侧栏渲染 ================= */
+function renderNav(){
+  const activeKey = route.page === 'tool' ? 'works' : (route.page === 'note' ? 'notes' : route.page);
+  document.getElementById('navLinks').innerHTML = NAV.map(n=>
+    `<a class="clickable${activeKey===n.k?' cur':''}" data-go="${n.k}">${n.t}</a>`
+  ).join('');
+}
+
 function renderSide(){
   const p = route.page;
-  const cur = k => (p===k ? ' cur' : '');
-  const real = SRC === 'real';
-  /* 笔记分支：示例 = 6 个学习阶段；真实 = 7 个主题分支（cnt 显示选题候选项数） */
-  const branchHtml = real
-    ? REAL.branches.map(b=>`<a class="ind1 clickable${p==='notes'&&route.params.cat===b.id?' cur':''}" data-go="notes" data-cat="${b.id}">
-        ${b.name}<span class="cnt">${b.cand.length}</span></a>`).join('')
-    : STAGES.map((s,i)=>`<a class="ind1 clickable${p==='notes'&&route.params.cat===s.id?' cur':''}" data-go="notes" data-cat="${s.id}">
-        ${s.name.replace(/^阶段 (\d+) · /,'')}<span class="cnt">${String(i+1).padStart(2,'0')}</span></a>`).join('');
-  /* 实验：真实站点尚无已完成的实验 */
-  const labHtml = real
-    ? ''
-    : LABS.map(l=>`<a class="ind1 clickable${p==='lab'&&route.params.id===l.id?' cur':''}" data-go="lab" data-id="${l.id}">
-        ${l.slug.replace(/^\d+-/,'')}<span class="cnt">${l.id.replace('L-','')}</span></a>`).join('');
-  const noteHtml = real ? '' : `
-    <div class="grp">当前笔记</div>
-    <a class="ind2 clickable${p==='note'?' cur':''}" data-go="note" data-slug="why-padding-3x">false sharing</a>`;
+  const tools = (window.LiteKitTools && window.LiteKitTools.TOOLS) || [];
+  const cur = k => (p === k ? ' cur' : '');
   const html = `
-    <div class="grp">门户</div>
-    <a class="clickable${cur('now')}" data-go="now">${ic('target')}Now</a>
-    <a class="clickable${cur('roadmap')}" data-go="roadmap">${ic('map')}Roadmap</a>
-    <a class="clickable${cur('about')}" data-go="about">${ic('info')}About</a>
-    <a class="clickable${cur('notes')}" data-go="notes">${ic('doc')}Notes</a>
-    <a class="clickable${cur('labs')}" data-go="labs">${ic('flask')}Labs</a>
-    <a href="./resume/">${ic('file')}技术概览</a>
-    <div class="grp">笔记档案</div>
-    ${branchHtml}
-    ${real ? '' : `<div class="grp">示例实验</div>${labHtml}`}
-    ${noteHtml}
+    <div class="grp">门户导航</div>
+    <a class="clickable${cur('home')}" data-go="home">${ic('target')}首页总览</a>
+    <a class="clickable${cur('works')}" data-go="works">${ic('layers')}效率作品集<span class="cnt">${tools.length}</span></a>
+    <a class="clickable${p==='notes'||p==='note'?' cur':''}" data-go="notes">${ic('bulb')}产品设计复盘<span class="cnt">${PM_NOTES.length}</span></a>
+    <a class="clickable${cur('roadmap')}" data-go="roadmap">${ic('map')}造物演进路线</a>
+    <a class="clickable${cur('now')}" data-go="now">${ic('clock')}近期动态 Now</a>
+    <a class="clickable${cur('about')}" data-go="about">${ic('info')}关于本站</a>
+
+    <div class="grp">在线工具集（点开即用）</div>
+    ${tools.map(t => `
+      <a class="ind1 clickable${p==='tool'&&route.params.id===t.id?' cur':''}" data-go="tool" data-id="${t.id}">
+        ${ic(t.icon, 'sm')}<span>${t.name}</span><span class="cnt">${t.shortTag}</span>
+      </a>
+    `).join('')}
+
+    <div class="grp">外部档案</div>
+    <a href="./resume/">${ic('file')}能力概览页</a>
+    <a href="./about/">${ic('doc')}站点说明页</a>
   `;
   document.getElementById('side').innerHTML = html;
 }
 
-/* ================= 页面渲染 ================= */
-function renderNav(){
-  document.getElementById('navLinks').innerHTML = NAV.map(n=>
-    `<a class="clickable${route.page===n.k?' cur':''}" data-go="${n.k}">${n.t}</a>`
-  ).join('');
-}
-
-/* 代码块着色（极简 tokenizer，仅用于原型观感） */
-function codeBlock(text, lang){
-  const esc = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const body = esc.split('\n').map(line=>{
-    if(/^\s*\$/.test(line)) return line.replace(/^(\s*)(\$)/, '$1<span class="tk-p">$2</span>');
-    return line;
-  }).join('\n').replace(/(\d[\d,]*)/g,'<span class="tk-n">$1</span>');
-  return `<div class="code">
-    <div class="top"><span class="lang">${lang||'bash'}</span>
-      <button class="cp clickable" data-copy>${ic('copy','sm')}复制</button></div>
-    <div class="scrollx"><pre>${body}</pre></div>
-  </div>`;
+/* ================= 页面视图 ================= */
+function renderBentoGrid(tools){
+  return `
+    <div class="bento-grid">
+      ${tools.map(t => `
+        <div class="bento-card">
+          <div class="bento-top">
+            <span class="bento-icon">${ic(t.icon, 'lg')}</span>
+            <div class="bento-badges">
+              <span class="tag doing"><span class="d"></span>${t.category}</span>
+              <span class="tag done">${t.badge}</span>
+            </div>
+          </div>
+          <div class="bento-body">
+            <div class="bento-code">${t.code} · ${t.accentTag}</div>
+            <h3 class="bento-title"><a class="clickable" data-go="tool" data-id="${t.id}">${t.name} — ${t.cnName}</a></h3>
+            <p class="bento-pain"><b>解决痛点：</b>${t.pain}</p>
+            <div class="bento-hl">${ic('check-sm','sm')}<span>${t.highlight}</span></div>
+          </div>
+          <div class="bento-foot">
+            <a class="btn primary sm clickable" data-go="tool" data-id="${t.id}">${ic('play','sm')}立即在线体验 ${ic('arrow-r','sm')}</a>
+            <a class="btn ghost sm clickable" data-go="note" data-slug="${t.noteSlug}">${ic('bulb','sm')}PM 产品复盘</a>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
 }
 
 function pageHome(){
-  const real = SRC === 'real';
-  const rec  = real ? [] : NOW.recent;                       // 真实站点：还没有任何产出
-  const st   = real ? REAL.stats : {notes:12, labs:5, streak:7};
-  const focusText = real
-    ? '主线：C → 计算机基础 → 数据结构算法 → C++ / 并行 / CUDA → 机器学习 → 平台工程'
-    : NOW.focus;
-  const typeIcon = {doc:'doc', flask:'flask', note:'doc', lab:'flask'};
+  const tools = (window.LiteKitTools && window.LiteKitTools.TOOLS) || [];
   return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：这是 P-01 首页的高保真稿。左侧是学习方向与入口，右侧是示例更新。</div></div>
   <div class="hero">
     <div class="left">
       <div>
-        <span class="eyebrow">${ic('target','sm')}AI 平台开发 / AI Infra</span>
+        <span class="eyebrow"><span class="pulse"></span>AI Native 产品造物 · 个人效率作品集</span>
       </div>
-      <h1 class="name">AI Infra 学习档案</h1>
-      <div class="direction">系统编程、并行计算与 AI 基础设施</div>
-      <div class="focus">${ic('target')}<div>${real?focusText:'当前聚焦：'+focusText}</div></div>
+      <h1 class="name">把日常小痛点，<br>做成顺手的小工具</h1>
+      <div class="direction">免登录 · 点开即玩 · 纯浏览器本地运行的极简效率套件</div>
+      <div class="focus">
+        ${ic('bulb')}
+        <div><b>造物理念：</b>好作品不必是庞大的后台系统——能在 <b>30 秒内零门槛上手</b>、干净利落地解决一个真实高频麻烦，并把边缘体验打磨到位，就是最真诚的能力证明。</div>
+      </div>
       <div class="stat-row">
-        <div class="stat"><div class="v">${st.notes}</div><div class="l">篇笔记</div></div>
-        <div class="stat"><div class="v">${st.labs}</div><div class="l">个实验</div></div>
-        <div class="stat"><div class="v">${st.streak}</div><div class="l">周连续产出</div></div>
+        <div class="stat"><div class="v">4</div><div class="l">款在线可用工具</div></div>
+        <div class="stat"><div class="v">0 B</div><div class="l">隐私数据上传服务端</div></div>
+        <div class="stat"><div class="v">100%</div><div class="l">内置一键示例体验</div></div>
       </div>
       <div class="btns">
-        <a class="btn primary clickable" data-go="roadmap">${ic('map')}Roadmap${ic('arrow-r','ic-arrow')}</a>
-        <a class="btn ghost clickable" data-go="notes">${ic('doc')}Notes</a>
-        <a class="btn ghost clickable" data-go="labs">${ic('flask')}Labs</a>
+        <a class="btn primary clickable" data-go="works">${ic('layers')}浏览全部作品${ic('arrow-r','ic-arrow')}</a>
+        <a class="btn ghost clickable" data-go="tool" data-id="cleanpaste">${ic('spark')}试用 CleanPaste</a>
+        <a class="btn ghost clickable" data-go="notes">${ic('bulb')}阅读产品复盘</a>
       </div>
       <div class="contact">
-        <a class="link" href="./resume/">${ic('file','sm')}查看技术概览</a>
-        <a class="link" href="./about/">${ic('info','sm')}关于本站</a>
+        <a class="link" href="./resume/">${ic('file','sm')}查看能力概览</a>
+        <span style="color:var(--ink-4)">·</span>
+        <a class="link clickable" data-go="roadmap">${ic('map','sm')}查看四阶段造物路线</a>
+        <span style="color:var(--ink-4)">·</span>
+        <a class="link clickable" data-go="about">${ic('info','sm')}关于本站原则</a>
       </div>
     </div>
+
     <div class="right">
-      <div class="ocean-panel"><canvas class="ocean-preview" aria-hidden="true"></canvas></div>
-      <div class="sec-h">${ic('clock')}最近更新</div>
-      ${rec.length
-        ? `<div class="recent">${rec.map(r=>`<a class="row clickable" data-go="${r[3]}" data-slug="${r[3]==='note'?r[4]:''}" data-id="${r[3]==='lab'?r[4]:''}">
-          <span class="ti">${ic(typeIcon[r[5]]||'doc','sm')}</span>
-          <span class="tx"><span class="k">${r[0]}</span>${r[1]}</span>
-          <span class="dt">${r[2]}</span>
-          ${ic('arrow-r','ic-arrow')}
-        </a>`).join('')}</div>`
-        : `<div class="empty">${ic('inbox')}<div>暂无已发布的笔记和实验。<br><a class="link" data-go="roadmap">查看学习路线 ${ic('arrow-r','sm')}</a></div></div>`}
+      <div class="ocean-panel">
+        <canvas class="ocean-preview" aria-hidden="true"></canvas>
+        <div class="ocean-caption">
+          <span><code>0101</code> 二进制深海游鱼画布</span>
+          <a class="link clickable" data-go="tool" data-id="flowzone">联动开启深海专注 ${ic('arrow-r','sm')}</a>
+        </div>
+      </div>
+      <div class="sec-h">${ic('spark')}在线效率套件（点击直接交互体验）</div>
+      <div class="recent">
+        ${tools.map(t => `
+          <a class="row clickable" data-go="tool" data-id="${t.id}">
+            <span class="ti">${ic(t.icon, 'sm')}</span>
+            <span class="tx">
+              <span class="k">${t.code} · ${t.category}</span>
+              <b>${t.name}</b> · ${t.cnName}
+            </span>
+            <span class="dt">在线可用</span>
+            ${ic('arrow-r','ic-arrow')}
+          </a>
+        `).join('')}
+      </div>
     </div>
+  </div>
+
+  <div class="home-showcase">
+    <div class="bar" style="flex-wrap:wrap;margin-bottom:12px">
+      <div>
+        <div class="lbl-c">PORTFOLIO MATRIX · 效率四件套</div>
+        <h2 style="font-size:var(--fs-xl);margin-top:3px">四大高频场景作品总览</h2>
+      </div>
+      <span style="font-size:var(--fs-xs);color:var(--ink-3)">每款作品均配备「一键填入示例」与「PM 产品复盘卡片」</span>
+    </div>
+    ${renderBentoGrid(tools)}
+  </div>`;
+}
+
+function pageWorks(){
+  const allTools = (window.LiteKitTools && window.LiteKitTools.TOOLS) || [];
+  const cats = ['all', ...new Set(allTools.map(t => t.category))];
+  const filtered = worksFilter === 'all' ? allTools : allTools.filter(t => t.category === worksFilter);
+
+  return `
+  <div class="crumb">${ic('chev-r')}<a class="clickable" data-go="home">首页</a><span style="color:var(--ink-4)">/</span>作品集 · Works</div>
+  <div class="bar" style="flex-wrap:wrap;align-items:flex-end">
+    <div>
+      <h1 class="page">LiteKit · 个人效率工具作品集</h1>
+      <p class="lead" style="margin-top:6px">围绕文字排版、视觉分享、文件隐私与沉浸专注四个日常刚需构建。全部免登录、内置演示素材、纯浏览器离线运行。</p>
+    </div>
+  </div>
+
+  <div class="filter-pills" role="tablist" aria-label="按分类筛选作品">
+    ${cats.map(c => `
+      <button type="button" class="pill-btn ${worksFilter===c?'active':''}" data-works-filter="${escHtml(c)}">
+        ${c === 'all' ? `全部作品 (${allTools.length})` : escHtml(c)}
+      </button>
+    `).join('')}
+  </div>
+
+  ${renderBentoGrid(filtered)}
+
+  <div class="tbl-wrap" style="margin-top:6px">
+    <div class="scrollx">
+      <table class="tbl">
+        <thead>
+          <tr><th>编号</th><th>作品名称</th><th>核心解决痛点</th><th>原生技术方案</th><th>产品复盘</th></tr>
+        </thead>
+        <tbody>
+          ${allTools.map(t => `
+            <tr class="clickable" data-go="tool" data-id="${t.id}">
+              <td class="num">${t.code}</td>
+              <td><b style="color:var(--ink)">${t.name}</b> <span style="color:var(--ink-3)">· ${t.cnName}</span></td>
+              <td style="color:var(--ink-2)">${t.tagline}</td>
+              <td><span class="tag">${t.accentTag}</span></td>
+              <td><a class="link clickable" data-go="note" data-slug="${t.noteSlug}">查看复盘 ${ic('arrow-r','sm')}</a></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function pageTool(){
+  if(!window.LiteKitTools) return page404();
+  const html = window.LiteKitTools.renderToolPage(route.params.id);
+  return html || page404();
+}
+
+function pageNotes(){
+  const cat = route.params.cat;
+  const rows = cat ? PM_NOTES.filter(n => n.topic === cat) : PM_NOTES;
+  const topics = [...new Set(PM_NOTES.map(n => n.topic))];
+
+  return `
+  <div class="crumb">${ic('chev-r')}<a class="clickable" data-go="home">首页</a><span style="color:var(--ink-4)">/</span>产品复盘 · Notes${cat?`<span style="color:var(--ink-4)">/</span>${escHtml(cat)}`:''}</div>
+  <h1 class="page">Notes · 产品痛点拆解与迭代复盘</h1>
+  <p class="lead">代码只是最终交付物，背后的「为什么做、砍掉了什么伪需求、打磨了哪些边缘体验」才是产品设计的核心。每篇复盘均与对应的在线工具互链。</p>
+
+  <div class="filter-pills">
+    <a class="pill-btn clickable ${!cat?'active':''}" data-go="notes">全部复盘 (${PM_NOTES.length})</a>
+    ${topics.map(tp => `
+      <a class="pill-btn clickable ${cat===tp?'active':''}" data-go="notes" data-cat="${escHtml(tp)}">${escHtml(tp)}</a>
+    `).join('')}
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    ${rows.map(n => `
+      <a class="card linkable clickable" data-go="note" data-slug="${n.slug}">
+        <div class="bar" style="align-items:flex-start;gap:14px">
+          <span class="ti" style="width:36px;height:36px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent-soft);color:var(--accent-ink)">${ic('bulb','lg')}</span>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:5px">
+              <span class="tag doing">${n.toolCode} · ${n.topic}</span>
+              <span style="font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-4)">${n.date}</span>
+              <span style="font-size:var(--fs-xs);color:var(--ink-4)">· ${n.readTime}</span>
+            </div>
+            <h3 style="font-size:var(--fs-lg);margin-bottom:6px">${n.title}</h3>
+            <div class="meta" style="color:var(--ink-2);line-height:1.65">${n.summary}</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+              ${n.tags.map(tg => `<span class="tag">${ic('tag','sm')}${tg}</span>`).join('')}
+            </div>
+          </div>
+          <span style="flex:none;color:var(--accent-ink);font-size:var(--fs-sm);display:inline-flex;align-items:center;gap:4px;margin-top:4px">阅读全文 ${ic('arrow-r','ic-arrow')}</span>
+        </div>
+      </a>
+    `).join('')}
+  </div>`;
+}
+
+function pageNote(){
+  const slug = route.params.slug || 'cleanpaste-pm-review';
+  const idx = PM_NOTES.findIndex(x => x.slug === slug);
+  if(idx === -1) return page404();
+  const n = PM_NOTES[idx];
+  const prev = PM_NOTES[idx - 1];
+  const next = PM_NOTES[idx + 1];
+
+  return `
+  <div class="crumb">
+    ${ic('chev-r')}<a class="clickable" data-go="notes">产品复盘</a>
+    <span style="color:var(--ink-4)">/</span><span>${n.toolCode}</span>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <span class="tag done"><span class="d"></span>已上线复盘</span>
+    <span class="tag">${ic('cal','sm')}${n.date}</span>
+    <span class="tag">${n.topic}</span>
+    ${n.tags.map(t=>`<span class="tag">${ic('tag','sm')}${t}</span>`).join('')}
+  </div>
+  <h1 class="page">${n.title}</h1>
+  <p class="lead">${n.summary}</p>
+
+  <div class="card hl" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div style="font-size:var(--fs-sm);color:var(--ink-2)">
+      <b>关联在线作品：</b>建议边玩实物边看复盘，直观对照每一处交互细节。
+    </div>
+    <a class="btn primary sm clickable" data-go="tool" data-id="${n.toolId}">${ic('play','sm')}打开关联工具 ${n.toolCode} ${ic('arrow-r','sm')}</a>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    ${n.segs.map(([h, body], i) => `
+      <div class="seg ${i===0||i===1?'req':''}">
+        <span class="no">${i+1}</span>
+        <div class="bd">
+          <div class="h"><b>${h}</b></div>
+          <p>${body}</p>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+
+  <div class="card plain" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:var(--fs-sm)">
+    ${prev ? `<a class="link clickable" data-go="note" data-slug="${prev.slug}">${ic('arrow-l','ic-arrow')}上一篇：${prev.toolCode} 复盘</a>` : `<a class="link clickable" data-go="notes">${ic('arrow-l','ic-arrow')}返回全部复盘列表</a>`}
+    ${next ? `<a class="link clickable" data-go="note" data-slug="${next.slug}">下一篇：${next.toolCode} 复盘${ic('arrow-r','ic-arrow')}</a>` : `<a class="link clickable" data-go="works">浏览全部在线作品${ic('arrow-r','ic-arrow')}</a>`}
   </div>`;
 }
 
 function pageRoadmap(){
   return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：六个阶段全部常驻，未开始的节点显示「计划 YYYY-MM 启动」而不是空白。每个节点都带可当场验证的检验标准（这份标准直接来自 roadmap.md）。</div></div>
-  <div class="crumb">${ic('chev-r')}门户<span style="color:var(--ink-4)">/</span>Roadmap</div>
-  <h1 class="page">Roadmap · 六阶段学习路线</h1>
-  <p class="lead">每个阶段只写「能当场验证」的标准，不写「了解 / 熟悉 / 掌握」这类无法判定的动词。</p>
-  ${STAGES.map((s,i)=>{
-    const demo = SRC === 'demo';
-    const current = demo && s.current;
-    return `
-    <div class="card ${current?'hl':''}">
-      <div class="bar" style="margin-bottom:6px">
+  <div class="crumb">${ic('chev-r')}<a class="clickable" data-go="home">首页</a><span style="color:var(--ink-4)">/</span>Roadmap</div>
+  <h1 class="page">Roadmap · 从 0 到 1 打造效率工具集的方法论</h1>
+  <p class="lead">不堆砌虚无缥缈的远期大饼，每个阶段都以「真实可交互、访客可当场验证」的线上交付物作为唯一通关标准。</p>
+  ${ROADMAP_STAGES.map(s => `
+    <div class="card ${s.current ? 'hl' : ''}">
+      <div class="bar" style="margin-bottom:8px;flex-wrap:wrap">
         <div style="display:flex;align-items:center;gap:11px">
-          <span class="no" style="width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;background:${current?'var(--accent)':'var(--bg-sunken)'};color:${current?'#fff':'var(--ink-3)'}">${String(i+1).padStart(2,'0')}</span>
-          <h3>${s.name}</h3>
+          <span style="width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;background:${s.current?'var(--accent)':'var(--bg-sunken)'};color:#fff">${s.code}</span>
+          <h3 style="margin:0">${s.name}</h3>
         </div>
-        ${demo ? `<span class="tag ${STAT_TAG[s.status]}"><span class="d"></span>${STAT[s.status]}</span>` : ''}
+        <span class="tag ${s.status==='done'?'done':'doing'}"><span class="d"></span>${s.status==='done'?'已交付上线':'持续迭代中'}</span>
       </div>
-      <div class="meta" style="margin-bottom:10px;font-size:var(--fs-base)">${s.goal}</div>
-      <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:7px">
-        ${s.criteria.map(c=>`<li style="display:flex;gap:9px;font-size:var(--fs-sm);color:var(--ink-2);line-height:1.6">
-          <span style="flex:none;margin-top:4px;color:${demo && s.status!=='todo'?'var(--ok-dot)':'var(--ink-4)'}">${ic('check-sm','sm')}</span><span>${c}</span></li>`).join('')}
+      <div class="meta" style="margin-bottom:11px;font-size:var(--fs-base);color:var(--ink-2)">${s.goal}</div>
+      <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px">
+        ${s.criteria.map(c => `
+          <li style="display:flex;gap:9px;font-size:var(--fs-sm);color:var(--ink-2);line-height:1.6">
+            <span style="flex:none;margin-top:4px;color:var(--ok-dot)">${ic('check-sm','sm')}</span><span>${c}</span>
+          </li>
+        `).join('')}
       </ul>
-      ${demo ? `<div style="margin-top:12px;padding-top:11px;border-top:1px solid var(--line);display:flex;gap:16px;flex-wrap:wrap;font-size:var(--fs-sm)">
-        ${s.links.length?`<a class="link clickable" data-go="note" data-slug="why-padding-3x">关联笔记${ic('arrow-r','ic-arrow')}</a>`:''}
-        ${s.labLinks.length?`<a class="link clickable" data-go="lab" data-id="L-002">关联实验 L-002${ic('arrow-r','ic-arrow')}</a>`:''}
-        ${s.empty?`<span style="color:var(--ink-3)">${s.empty}</span>`:''}
-      </div>` : ''}
-    </div>`;
-  }).join('')}`;
-}
-
-function pageNotes(){
-  const focus = route.params.cat;
-  if(SRC === 'real') return pageNotesReal(focus);     // 真实站点：7 个主题分支
-  if(focus && !STAGE_NAME[focus]) return page404();   // 非法阶段 key → 404
-  const rows = focus ? NOTES.filter(n=>n.stage===STAGE_NAME[focus]) : NOTES;
-  return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：按技术主题组织，不是按时间倒序。点侧栏的主题会过滤列表；列表里的每条都能点进单篇。</div></div>
-  <div class="crumb">${ic('chev-r')}门户<span style="color:var(--ink-4)">/</span>Notes${focus?'<span style="color:var(--ink-4)">/</span>'+STAGE_NAME[focus]:''}</div>
-  <h1 class="page">Notes · 笔记档案</h1>
-  <p class="lead">按技术主题组织，不是按时间倒序　——　全站不设 /blog/ 与 /archive/。</p>
-  ${rows.length ? rows.map(n=>`
-    <a class="card linkable clickable" data-go="note" data-slug="${n.slug}">
-      <div class="bar" style="align-items:flex-start;gap:14px">
-        <span class="ti" style="width:34px;height:34px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent-soft);color:var(--accent-ink)">${ic('doc','lg')}</span>
-        <div style="flex:1;min-width:0">
-          <h3>${n.title}</h3>
-          <div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-            <span>${n.topic}</span><span style="color:var(--ink-4)">·</span><span>${n.stage}</span>
-            <span style="color:var(--ink-4)">·</span><span style="font-family:var(--mono);font-size:12px">${n.date}</span>
-            ${n.lab?`<span class="tag" style="margin-left:2px">${ic('flask','sm')}${n.lab}</span>`:''}
-          </div>
-        </div>
-        <span class="tag ${n.status==='draft'?'draft':(n.status==='partial'?'doing':'done')}" style="flex:none"><span class="d"></span>${n.statusText}</span>
+      <div style="margin-top:13px;padding-top:11px;border-top:1px solid var(--line);display:flex;justify-content:flex-end">
+        <a class="link clickable" data-go="tool" data-id="${s.toolLink}">${s.toolLabel}${ic('arrow-r','ic-arrow')}</a>
       </div>
-    </a>`).join('') : `<div class="empty">${ic('inbox')}<div>该分支尚未开始，计划 2027-01 启动　——　不渲染空白列表</div></div>`}
-  <div class="card plain"><div class="lbl-c">空态示例（机器学习分支）</div>
-    <div class="empty" style="margin-top:9px">${ic('inbox')}<div>机器学习　·　0 篇　·　该分支尚未开始，计划 2027-03 启动</div></div></div>`;
-}
-
-/* 真实站点视图：7 个主题分支。目前全部为空，只有收录目标 / 启动计划 / 选题候选 */
-function pageNotesReal(key){
-  const b = key ? REAL.branches.find(x=>x.id===key) : null;
-  if(key && !b) return page404();
-  return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：<b>这是 learning-notes 的真实结构</b>（数据源已切到「真实结构」）。7 个分支<b>目前全部为空</b>——只有收录目标、启动计划与选题候选，尚无 1 篇笔记正文。这是冷启动的真实状态，不是渲染失败。</div></div>
-  <div class="crumb">${ic('chev-r')}门户<span style="color:var(--ink-4)">/</span>Notes${b?'<span style="color:var(--ink-4)">/</span>'+b.name:''}</div>
-  <h1 class="page">${b ? b.name : 'Notes · 笔记档案'}</h1>
-  <p class="lead">${b ? b.desc : '按技术主题组织的树，不是按日期倒排的文章流。左侧边栏每个分支点开就是该主题的全部笔记。'}</p>
-  ${b ? `
-    <div class="card hl">
-      <div class="lbl-c" style="margin-bottom:5px">收录目标</div>
-      <div style="font-size:var(--fs-md);line-height:1.65">${b.aim}</div>
     </div>
-    ${b.desens ? `<div class="card">
-      <div class="lbl-c" style="margin-bottom:8px">${ic('alert','sm')} 写每篇之前必须先过的脱敏检查</div>
-      <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px">
-        ${b.desens.map(d=>`<li style="display:flex;gap:8px;font-size:var(--fs-sm);color:var(--ink-2);line-height:1.6">
-          <span style="flex:none;margin-top:5px;color:var(--pd-dot)">${ic('check-sm','sm')}</span><span>${d}</span></li>`).join('')}
-      </ul>
-    </div>` : ''}
-    <div class="card">
-      <div class="bar" style="margin-bottom:9px">
-        <div class="lbl-c">选题候选</div>
-        <span class="tag">${b.cand.length} 个</span>
-      </div>
-      <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:7px">
-        ${b.cand.map(c=>`<li style="display:flex;gap:9px;font-size:var(--fs-sm);color:var(--ink-2);line-height:1.6">
-          <span style="flex:none;margin-top:4px;color:var(--ink-4)">${ic('chev-r','sm')}</span><span>${c}</span></li>`).join('')}
-      </ul>
-    </div>
-    <div class="empty">${ic('inbox')}<div>该分支下还没有笔记　·　0 篇<br>计划 <b>${b.plan}</b> 启动</div></div>
-    <div class="card plain"><a class="link clickable" data-go="notes">${ic('arrow-l','ic-arrow')}返回全部 ${REAL.branches.length} 个分支</a></div>
-  ` : `
-    ${REAL.branches.map(x=>`
-    <a class="card linkable clickable" data-go="notes" data-cat="${x.id}">
-      <div class="bar" style="align-items:flex-start;gap:14px">
-        <span class="ti" style="width:34px;height:34px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;background:${x.main?'var(--accent)':'var(--accent-soft)'};color:${x.main?'#fff':'var(--accent-ink)'}">${ic('doc','lg')}</span>
-        <div style="flex:1;min-width:0">
-          <h3>${x.name}${x.main?'　<span class="tag doing"><span class="d"></span>主战场</span>':''}</h3>
-          <div class="meta" style="font-size:var(--fs-sm)">${x.desc}</div>
-          <div class="meta" style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <span class="tag todo"><span class="d"></span>尚未开始 · 计划 ${x.plan} 启动</span>
-            <span class="tag">${ic('list','sm')}${x.cand.length} 个选题候选</span>
-            <span class="tag">0 篇笔记</span>
-          </div>
-        </div>
-        <span style="flex:none;color:var(--ink-4)">${ic('arrow-r','ic-arrow')}</span>
-      </div>
-    </a>`).join('')}
-    <div class="card plain">
-      <div class="lbl-c" style="margin-bottom:5px">收录标准</div>
-      <div style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.7">一篇笔记只写<b>一件事</b>，300–800 字为度。写的是「我卡住的那一层」，不是「这个知识的完整教程」——后者网上有的是，前者只能我自己写。<br>每篇第一行固定写 <span style="font-family:var(--mono);font-size:12px">日期 · 状态 · 环境</span>，状态用 <b>初稿 / 修订 / 定稿</b> 三个词。初稿意味着我还没验证完。</div>
-    </div>
-  `}`;
-}
-
-function pageNote(){
-  if(SRC === 'real') return page404();           // 真实站点：尚无 1 篇笔记正文
-  const slug = route.params.slug || 'why-padding-3x';
-  const n = NOTES.find(x=>x.slug===slug);
-  if(!n) return page404();                       // #/note/<不存在的 slug> → 404
-  const sameTopic = NOTES.filter(x=>x.topic===n.topic);
-  const ti = sameTopic.indexOf(n);
-  const prev = sameTopic[ti-1], next = sameTopic[ti+1];
-  return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：六段模板里 ①②⑥ 三段不可缺（缺了就不计入 UE），③④⑤ 可缺。底部必须有「关联 Lab」与「返回主题」两个出口。</div></div>
-  <div class="crumb">${ic('chev-r')}<a class="clickable" data-go="notes" data-cat="${STAGE_KEY[n.stage]}">${n.topic}</a><span style="color:var(--ink-4)">/</span>${n.slug}</div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-    <span class="tag ${n.status==='draft'?'draft':(n.status==='partial'?'doing':'done')}"><span class="d"></span>${n.statusText}</span>
-    <span class="tag">${ic('cal','sm')}${n.date}</span>
-    <span class="tag">${ic('map','sm')}${n.stage}</span>
-    ${n.tags.map(t=>`<span class="tag">${ic('tag','sm')}${t}</span>`).join('')}
-  </div>
-  <h1 class="page">${n.title}</h1>
-  <div style="display:flex;flex-direction:column;gap:11px">
-    ${n.segs.map(([t,req,body],i)=>{
-      const must = req==='不可缺';
-      const miss = body.startsWith('（草稿）')||body==='待填。'||body==='占位。';
-      return `<div class="seg ${must?'req':''} ${miss?'miss':''}">
-        <span class="no">${i+1}</span>
-        <div class="bd">
-          <div class="h"><b>${t.replace(/^[①-⑥]\s*/,'')}</b>
-            <span class="reqd ${must?'y':'n'}">${must?'不可缺':'可缺'}</span></div>
-          <p>${body}</p>
-        </div>
-      </div>`;
-    }).join('')}
-  </div>
-  <div class="card hl">
-    <div class="bar" style="flex-wrap:wrap;gap:14px;font-size:var(--fs-sm)">
-      ${n.lab?`<a class="link clickable" data-go="lab" data-id="${n.lab}">${ic('flask')}去看关联 Lab ${n.lab}${ic('arrow-r','ic-arrow')}</a>`:`<span style="color:var(--ink-3)">本篇没有关联 Lab（不计入 UE 的 B 条件）</span>`}
-      <a class="link clickable" data-go="notes" data-cat="${STAGE_KEY[n.stage]}">返回所属主题：${n.topic}</a>
-    </div>
-  </div>
-  <div class="card plain" style="display:flex;justify-content:space-between;gap:12px;font-size:var(--fs-sm)">
-    ${prev?`<a class="link clickable" data-go="note" data-slug="${prev.slug}">${ic('arrow-l','ic-arrow')}同主题上一篇</a>`:`<span style="color:var(--ink-4)">已是同主题第一篇</span>`}
-    ${next?`<a class="link clickable" data-go="note" data-slug="${next.slug}">同主题下一篇${ic('arrow-r','ic-arrow')}</a>`:`<span style="color:var(--ink-4)">已是同主题最后一篇</span>`}
-  </div>`;
-}
-
-function pageLabs(){
-  if(SRC === 'real') return pageLabsReal();
-  return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：一行一条，面试官扫这一页就能判断「这人是否动手」。点任意一行进详情。最后一行是「数据待补」的合法状态——失败的实验也算一个 Lab。</div></div>
-  <div class="crumb">${ic('chev-r')}门户<span style="color:var(--ink-4)">/</span>Labs</div>
-  <h1 class="page">Labs · 动手实验</h1>
-  <p class="lead">一行一条：日期 / 主题 / 一句话结论 / 关键数据 / 状态</p>
-  <div class="tbl-wrap">
-    <div class="scrollx">
-      <table class="tbl">
-        <thead><tr><th>日期</th><th>编号 · 主题</th><th>一句话结论</th><th>关键数据</th><th>状态</th></tr></thead>
-        <tbody>
-          ${LABS.map(l=>{
-            const conc = l.status==='pending'
-              ? `<span style="color:var(--ink-3)">${l.summary}</span>`
-              : l.summary;
-            const tagCls = l.status==='pending' ? 'pending' : 'done';
-            const tagTxt = l.status==='pending' ? 'pending-data' : 'done';
-            return `<tr class="clickable" data-go="lab" data-id="${l.id}">
-              <td class="num">${l.date}</td>
-              <td><a class="id" href="#/lab/${l.id}">${l.id}</a> · ${l.slug.replace(/^\d+-/,'')}</td>
-              <td>${conc}</td>
-              <td class="num ${l.status==='pending'?'weak':'strong'}">${l.factor}</td>
-              <td><span class="tag ${tagCls}"><span class="d"></span>${tagTxt}</span></td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card plain"><div class="lbl-c">Labs 为 0 时的空态（V1.0 上线前会短暂出现）</div>
-    <div class="empty" style="margin-top:9px">${ic('inbox')}<div>第 1 个 Lab 正在跑，预计本周上线　→　<a class="link clickable" data-go="roadmap">去看 Roadmap 当前节点</a></div></div></div>`;
-}
-
-/* 真实站点视图：尚无已完成的实验 → 以四条数据硬规则 + 选题池为主体 */
-function pageLabsReal(){
-  return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：<b>真实状态</b>——learning-notes 里「尚无已完成的实验」。这一页因此以四条数据硬规则 + 选题池为主体，而不是假装已经有数据。</div></div>
-  <div class="crumb">${ic('chev-r')}门户<span style="color:var(--ink-4)">/</span>Labs</div>
-  <h1 class="page">Labs · 动手实验</h1>
-  <p class="lead">带真实数据的实验记录。四条数据硬规则：有对照、有重复、有单位、有原始输出。</p>
-  <div class="empty">${ic('flask')}<div><b>尚无已完成的实验</b><br>下方列出了计划开展的实验。</div></div>
-  <div class="card">
-    <div class="lbl-c" style="margin-bottom:9px">写一篇 Lab 必须同时满足四条，缺一条就不要发</div>
-    <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:9px">
-      ${REAL.labRules.map((r,i)=>`<li style="display:flex;gap:11px">
-        <span style="width:22px;height:22px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px">${i+1}</span>
-        <span style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.6"><b style="color:var(--ink)">${r[0]}</b>　${r[1]}</span></li>`).join('')}
-    </ul>
-  </div>
-  <div class="card">
-    <div class="lbl-c" style="margin-bottom:5px">诚实条款</div>
-    <div style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.7">${REAL.labHonest}</div>
-  </div>
-  <div class="tbl-wrap">
-    <div class="scrollx">
-      <table class="tbl">
-        <thead><tr><th>#</th><th>选题</th><th>成本</th><th>考察点</th></tr></thead>
-        <tbody>
-          ${REAL.labPool.map(r=>`<tr>
-            <td class="id">${r[0]}</td>
-            <td>${r[4]?`<b>${r[1]}</b>　<span class="tag doing"><span class="d"></span>建议第一篇</span>`:r[1]}</td>
-            <td><span class="tag ${r[2]==='极低'?'done':(r[2]==='低'?'doing':'todo')}"><span class="d"></span>${r[2]}</span></td>
-            <td style="color:var(--ink-2)">${r[3]}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card plain">
-    <div class="lbl-c" style="margin-bottom:8px">每个实验目录必须自带</div>
-    ${codeBlock('labs/001-xxx/\n├── index.md      # 结论 + 对比数据表 + 复现步骤\n├── bench.c       # 实验源码（必须是完整可编译的）\n├── run.sh        # 一键复现命令\n└── raw/\n    └── perf-stat.txt   # 原始输出，不做任何整理', 'text')}
-    <div style="font-size:var(--fs-xs);color:var(--ink-3);margin-top:9px">原始输出放成<b>纯文本</b>是有意为之：它能被 grep 全文命中、能被 diff，不依赖任何平台私有格式。</div>
-  </div>`;
-}
-
-function pageLab(){
-  if(SRC === 'real') return page404();           // 真实站点：尚无已完成的实验
-  const l = LABS.find(x=>x.id===(route.params.id||'L-002'));
-  if(!l) return page404();                       // #/lab/<不存在的 id> → 404
-  return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：这一页是「带实测数据」这个定位的实体。环境字段缺一不许发布；数据表必须 ≥2 组对照 × 每组 ≥3 次取中位数；原始输出必须是终端原文。</div></div>
-  <div class="crumb">${ic('chev-r')}<a class="clickable" data-go="labs">动手实验</a><span style="color:var(--ink-4)">/</span><span class="id">${l.id}</span></div>
-  <h1 class="page">${l.id}　${l.title}</h1>
-  <div class="env">
-    <div class="k">${ic('term','sm')}环境（缺一不许发布）</div>
-    <div class="grid">${l.env.filter(Boolean).map(e=>`<span class="cell">${e}</span>`).join('')}</div>
-    <div class="honest">${ic('alert','sm')}<div>
-      <span class="chk ${l.fixedFreq?'on':''}"><span class="box">${l.fixedFreq?ic('check-sm','sm'):''}</span>已固定 CPU 频率且已关 turbo</span>
-      　<span class="chk on"><span class="box">${ic('check-sm','sm')}</span>${l.honest}</span>
-    </div></div>
-  </div>
-  <div class="card">
-    <div class="lbl-c" style="margin-bottom:5px">假设（写下来才能证伪）</div>
-    <div style="font-size:var(--fs-md);color:var(--ink)">${l.hypothesis}</div>
-  </div>
-  ${codeBlock(l.cmd, 'bash')}
-  <div class="card">
-    <div class="lbl-c" style="margin-bottom:5px">测量方法</div>
-    <div style="font-size:var(--fs-sm);color:var(--ink-2)">${l.measurement}</div>
-  </div>
-  <div class="tbl-wrap">
-    <div class="scrollx">
-      <table class="tbl">
-        <thead><tr><th>组别</th><th>第 1 次</th><th>第 2 次</th><th>第 3 次</th><th>中位数</th><th>相对</th></tr></thead>
-        <tbody>
-          ${l.rows.map(r=>{
-            const pend = r[1]==='—';
-            return `<tr><td>${r[0]}</td>
-              <td class="num ${pend?'weak':''}">${r[1]}</td><td class="num ${pend?'weak':''}">${r[2]}</td>
-              <td class="num ${pend?'weak':''}">${r[3]}</td>
-              <td class="num ${pend?'weak':'strong'}">${r[4]}</td>
-              <td class="num ${pend?'weak':'strong'}">${r[5]}</td></tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>
-  </div>
-  ${codeBlock(l.raw, 'text')}
-  <div class="card">
-    <div class="lbl-c" style="margin-bottom:5px">结论</div>
-    <div style="font-size:var(--fs-md);color:var(--ink)">${l.conclusion}</div>
-  </div>
-  <div class="card hl">
-    <div class="bar" style="flex-wrap:wrap;gap:14px;font-size:var(--fs-sm)">
-      ${l.note?`<a class="link clickable" data-go="note" data-slug="${l.note}">${ic('doc')}来源笔记${ic('arrow-r','ic-arrow')}</a>`:`<span style="color:var(--ink-3)">尚无来源笔记（note ↔ lab 互链后才构成 1 个 UE）</span>`}
-      <a class="link clickable" data-go="labs">${ic('arrow-l','ic-arrow')}返回 Labs 索引</a>
-    </div>
-  </div>`;
+  `).join('')}`;
 }
 
 function pageNow(){
-  if(SRC === 'real') return pageNowReal();
   return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：Now 页是整个站点的「活站证明」，也是断更保底动作。模板只有 3 个字段，单次更新 ≤10 分钟。上面那条红色告警是条件态，点一下按钮可以看它出现的样子。</div></div>
-  <div class="crumb">${ic('chev-r')}门户<span style="color:var(--ink-4)">/</span>Now</div>
-  <h1 class="page">Now · 现在在做什么</h1>
-  <div class="warn ${NOW.silent?'show':''}" id="warnBar">${ic('alert')}<div>最近更新时间已超过 30 天（如果现在就是这种情况，页顶会显示这条）</div></div>
+  <div class="crumb">${ic('chev-r')}<a class="clickable" data-go="home">首页</a><span style="color:var(--ink-4)">/</span>Now</div>
+  <h1 class="page">Now · 近期聚焦与更新日志</h1>
   <div class="card hl">
-    <div class="lbl-c" style="margin-bottom:5px">本周聚焦（1 句）</div>
-    <div style="font-size:var(--fs-lg);line-height:1.55">${NOW.focus}</div>
+    <div class="lbl-c" style="margin-bottom:6px">当前聚焦（2026.11）</div>
+    <div style="font-size:var(--fs-lg);line-height:1.6">完成 <b>LiteKit 效率四件套 V1.0</b> 全站整合上线，重点优化访客「前 30 秒免准备素材体验」与纯本地离线安全性。</div>
   </div>
   <div class="card">
-    <div class="lbl-c" style="margin-bottom:5px">卡在哪（1 句）</div>
-    <div style="font-size:var(--fs-md);color:var(--ink-2)">${NOW.blocker}</div>
-  </div>
-  <div class="card plain" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px">
-    <div style="display:flex;gap:26px;flex-wrap:wrap;font-size:var(--fs-sm);color:var(--ink-2)">
-      <span>最近更新日期：<b style="font-family:var(--mono)">${NOW.date}</b></span>
-      <span>连续产出周数：<b style="font-family:var(--mono);font-size:var(--fs-lg)">${NOW.streak}</b></span>
-      <span style="display:flex;align-items:center;gap:4px">
-        ${Array.from({length:8},(_,i)=>`<span style="width:11px;height:11px;border-radius:3px;background:${i<NOW.streak?'var(--accent)':'var(--bg-sunken)'};border:1px solid ${i<NOW.streak?'var(--accent)':'var(--line)'}"></span>`).join('')}
-      </span>
+    <div class="lbl-c" style="margin-bottom:10px">近期版本里程碑</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="bar" style="padding-bottom:10px;border-bottom:1px dashed var(--line);flex-wrap:wrap">
+        <div><span class="tag done" style="margin-right:8px">v1.0</span><b>FlowZone 深海心流舱上线</b>：打通全站二进制游鱼沉浸模式与四轨 Web Audio 实时声景合成</div>
+        <span style="font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-4)">2026-11-25</span>
+      </div>
+      <div class="bar" style="padding-bottom:10px;border-bottom:1px dashed var(--line);flex-wrap:wrap">
+        <div><span class="tag done" style="margin-right:8px">v0.9</span><b>SafePic 隐私水印压缩箱上线</b>：内置模拟校园卡样张与目标 KB 二分逼近压缩算法</div>
+        <span style="font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-4)">2026-11-22</span>
+      </div>
+      <div class="bar" style="padding-bottom:10px;border-bottom:1px dashed var(--line);flex-wrap:wrap">
+        <div><span class="tag done" style="margin-right:8px">v0.8</span><b>SnapCard 灵感分享卡片台上线</b>：支持 6 款精选视觉主题、荧光笔重点语法与 2x PNG 导出</div>
+        <span style="font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-4)">2026-11-20</span>
+      </div>
+      <div class="bar" style="flex-wrap:wrap">
+        <div><span class="tag done" style="margin-right:8px">v0.7</span><b>CleanPaste 文本净化排版台上线</b>：覆盖 AI 回复清洗、PDF 断行合并与中英自动空格</div>
+        <span style="font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-4)">2026-11-18</span>
+      </div>
     </div>
-    <button class="btn ghost clickable" id="toggleSilent" style="height:36px;min-width:0;font-size:var(--fs-sm);padding:0 14px">${ic('alert','sm')}切换断更告警态</button>
-  </div>
-  <div class="card">
-    <div class="lbl-c" style="margin-bottom:7px">最近 3 条产出</div>
-    ${NOW.recent.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)">
-      <span class="ti" style="width:28px;height:28px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent-soft);color:var(--accent-ink)">${ic(r[5]==='flask'?'flask':'doc','sm')}</span>
-      <a class="link clickable" data-go="${r[3]}" data-slug="${r[3]==='note'?r[4]:''}" data-id="${r[3]==='lab'?r[4]:''}" style="flex:1;min-width:0">
-        <span style="color:var(--ink-3);font-size:var(--fs-xs);margin-right:8px">${r[0]}</span>${r[1]}</a>
-      <span style="color:var(--ink-4);font-size:var(--fs-xs);font-family:var(--mono)">${r[2]}</span>
-    </div>`).join('')}
-  </div>
-  <div class="card plain">
-    <div class="lbl-c" style="margin-bottom:5px">保底动作（可用时间 &lt; 20 分钟时）</div>
-    <div style="font-size:var(--fs-sm);color:var(--ink-2)">只更新本页 2 句 + 发 1 张 Q-only 问题卡（≤150 字，标题以 ? 结尾）——计入周产出率，不计入 UE。</div>
   </div>`;
 }
 
-/* 真实站点视图：now.md 只有三个字段，前两个尚未填写 */
-function pageNowReal(){
-  const n = REAL.now;
-  return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：<b>这是 learning-notes/now.md 的真实状态</b>——三个字段，前两个<b>尚未填写</b>。原型如实呈现「待填写」，不替你编内容。</div></div>
-  <div class="crumb">${ic('chev-r')}门户<span style="color:var(--ink-4)">/</span>Now</div>
-  <h1 class="page">Now · 现在在做什么</h1>
-  <div class="card hl">
-    <div class="lbl-c" style="margin-bottom:5px">本周聚焦（1 句）</div>
-    <div style="font-size:var(--fs-lg);line-height:1.55;color:var(--ink-4)">${n.focus || '待更新'}</div>
-  </div>
-  <div class="card">
-    <div class="lbl-c" style="margin-bottom:5px">卡在哪（1 句）</div>
-    <div style="font-size:var(--fs-md);color:var(--ink-4)">${n.blocker || '待更新'}</div>
-  </div>
-  <div class="card plain" style="display:flex;gap:26px;flex-wrap:wrap;font-size:var(--fs-sm);color:var(--ink-2)">
-    <span>更新日期：<b style="font-family:var(--mono)">${n.date}</b></span>
-    <span>连续产出周数：<b style="font-family:var(--mono);font-size:var(--fs-lg)">0</b></span>
-  </div>
-  <div class="card">
-    <div class="lbl-c" style="margin-bottom:5px">为什么只有三个字段</div>
-    <div style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.7">${n.why}更细的进展会沉淀进笔记档案和动手实验，这里只留指针。</div>
-  </div>`;
-}
-
-/* P-09 About —— 内容逐条取自 learning-notes/src/content/docs/about.md（真实内容，非示例） */
 function pageAbout(){
-  const a = REAL.about;
+  const principles = [
+    ['真痛点驱动，拒绝玩具式凑数', '每做一个工具前先问自己：我自己在日常学习、写材料、投简历时会不会高频打开用它？能替真实场景省下哪怕 2 分钟的工具，就有存在的价值。'],
+    ['30 秒零门槛，把尊重留给访客的时间', '不弹注册框、不设付费墙，且每个工具都准备好了贴近真实场景的「一键体验示例」。哪怕手头没有任何素材，点一下按钮也能立即看懂前因后果。'],
+    ['纯浏览器本地计算，守住隐私底线', '文字排版、证件照加水印、图片压缩全部调用浏览器本地 Canvas 与内存接口处理，0 字节上传云端，断网照常运行。'],
+    ['不仅交付可用成品，也公开思考过程', '通过 AI 协同能大幅缩短编码距离，但痛点定义、功能克制与边缘体验依然取决于人的判断。每款工具都附有完整复盘，诚实记录设计取舍。']
+  ];
   return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：P-09 About 页，内容<b>逐条取自 learning-notes/src/content/docs/about.md</b>。这是真实站点内容，不是示例数据——两种数据源下都显示这一页。</div></div>
-  <div class="crumb">${ic('chev-r')}门户<span style="color:var(--ink-4)">/</span>About</div>
-  <h1 class="page">About · 关于本站</h1>
-  <p class="lead">${a.lead}</p>
+  <div class="crumb">${ic('chev-r')}<a class="clickable" data-go="home">首页</a><span style="color:var(--ink-4)">/</span>About</div>
+  <h1 class="page">About · 关于个人数字实验室</h1>
+  <p class="lead">你好！这里是我的个人作品主场。作为一名热爱动手探索的构建者，我喜欢观察学习与日常工作里的摩擦点，借助 AI 协同与现代 Web 原生技术，把想法快速打磨成干净、顺手、好看的轻量级数字产品。</p>
+
   <div class="card hl">
-    <div class="lbl-c" style="margin-bottom:9px">这个站的四条原则</div>
-    <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:10px">
-      ${a.principles.map((p,i)=>`<li style="display:flex;gap:11px">
-        <span style="width:22px;height:22px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px">${i+1}</span>
-        <span style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.6"><b style="color:var(--ink)">${p[0]}</b><br>${p[1]}</span></li>`).join('')}
+    <div class="lbl-c" style="margin-bottom:10px">本站坚持的四条产品原则</div>
+    <ul style="margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:12px">
+      ${principles.map((p, i) => `
+        <li style="display:flex;gap:12px">
+          <span style="width:24px;height:24px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px">${i+1}</span>
+          <span style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.68"><b style="color:var(--ink);font-size:var(--fs-base)">${p[0]}</b><br>${p[1]}</span>
+        </li>
+      `).join('')}
     </ul>
   </div>
+
   <div class="card">
-    <div class="lbl-c" style="margin-bottom:6px">为什么这么做</div>
-    <div style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.75;border-left:3px solid var(--accent);padding-left:13px">${a.quote}</div>
+    <div class="lbl-c" style="margin-bottom:6px">关于全站的「0/1 二进制深海游鱼」背景</div>
+    <div style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.75;border-left:3px solid var(--accent);padding-left:13px">
+      全站底层的动态背景由原生 2D Canvas 实时绘制：深海点阵之上，灰蓝色 <code>0</code> 与 <code>1</code> 汇聚成游动的鱼群。右上角支持随时暂停动画，并遵循系统级减少动态效果（<code>prefers-reduced-motion</code>）无障碍规范；在 <a class="link clickable" data-go="tool" data-id="flowzone">FlowZone 深海心流舱</a> 中，你还可以一键唤醒全屏深海沉浸专注模式。
+    </div>
   </div>
-  <div class="card">
-    <div class="lbl-c" style="margin-bottom:6px">关于「工作复盘」这一类笔记</div>
-    <div style="font-size:var(--fs-sm);color:var(--ink-2);line-height:1.7">${a.workLead}</div>
-    <div style="margin-top:10px;font-size:var(--fs-xs);color:var(--ink-3);line-height:1.7">记录原则：只写已经想清楚成因的问题；所有代码、日志、路径、服务名必须脱敏；不涉及公司机密与内部架构；写通用的排查方法和原理，不写具体怎么修某个业务。</div>
-    ${SRC==='real'?`<div style="margin-top:11px"><a class="link clickable" data-go="notes" data-cat="work">${ic('arrow-r','ic-arrow')}去看「工作复盘」分支</a></div>`:''}
-  </div>
-  <div class="card plain">
-    <a class="link" href="./resume/">${ic('file','sm')}技术概览</a> ·
-    <a class="link" href="./about/">${ic('info','sm')}站点说明</a>
+
+  <div class="card plain" style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">
+    <a class="link clickable" data-go="works">${ic('layers','sm')}浏览全部 4 款在线工具</a>
+    <a class="link clickable" data-go="notes">${ic('bulb','sm')}阅读 4 篇产品设计复盘</a>
+    <a class="link" href="./resume/">${ic('file','sm')}查看完整能力概览</a>
   </div>`;
 }
 
 function page404(){
   const bad = route.bad ? escHtml(route.bad) : '';
   return `
-  <div class="note-strip">${ic('info','sm')}<div>说明：404 必须给两个出口（回首页 / 去 Roadmap），不能是死胡同。<b>任何无法解析的 URL 都会落到这里</b>。演示方式：在地址栏输入未定义的 hash。</div></div>
   <div class="nf">
     <div class="big">404</div>
-    <div style="font-size:var(--fs-lg);color:var(--ink-2)">${bad?`<span style="font-family:var(--mono)">${bad}</span> 不存在`:'这个页面不存在'}　——　链接可能已失效，或者地址输错了</div>
+    <div style="font-size:var(--fs-lg);color:var(--ink-2)">${bad?`<span style="font-family:var(--mono)">${bad}</span> 未找到对应页面`:'这个地址不存在'}</div>
     <div class="btns" style="justify-content:center">
-      <a class="btn primary clickable" data-go="home">${ic('arrow-l')}回首页</a>
-      <a class="btn ghost clickable" data-go="roadmap">${ic('map')}去 Roadmap</a>
+      <a class="btn primary clickable" data-go="home">${ic('arrow-l')}返回首页</a>
+      <a class="btn ghost clickable" data-go="works">${ic('layers')}浏览在线作品集</a>
     </div>
   </div>`;
 }
 
-/* ================= 渲染 ================= */
+/* ================= 核心渲染入口 ================= */
 function render(){
+  if(window.LiteKitTools && typeof window.LiteKitTools.unmount === 'function'){
+    window.LiteKitTools.unmount();
+  }
   renderNav();
   renderSide();
-  const map = {home:pageHome, roadmap:pageRoadmap, notes:pageNotes, note:pageNote,
-               labs:pageLabs, lab:pageLab, now:pageNow, about:pageAbout, '404':page404};
+  const map = {
+    home: pageHome,
+    works: pageWorks,
+    labs: pageWorks,
+    tool: pageTool,
+    notes: pageNotes,
+    note: pageNote,
+    roadmap: pageRoadmap,
+    now: pageNow,
+    about: pageAbout,
+    '404': page404
+  };
   const main = document.getElementById('main');
-  main.innerHTML = (map[route.page]||page404)();
+  main.innerHTML = (map[route.page] || page404)();
   main.classList.remove('fade'); void main.offsetWidth; main.classList.add('fade');
   decorateLinks(document.getElementById('navLinks'));
   decorateLinks(document.getElementById('side'));
   decorateLinks(main);
+  if(route.page === 'tool' && window.LiteKitTools && typeof window.LiteKitTools.mount === 'function'){
+    window.LiteKitTools.mount(route.params.id);
+    decorateLinks(main);
+  }
 }
 
+/* ================= 抽屉与全局点击事件 ================= */
 const burger = document.getElementById('burger');
 const side = document.getElementById('side');
 const mobile = matchMedia('(max-width: 900px)');
@@ -1466,51 +1183,67 @@ function setDrawer(open){
 }
 mobile.addEventListener('change', () => setDrawer(false));
 
-/* ================= 事件代理 ================= */
 document.addEventListener('click', (e)=>{
-  /* 带修饰键 / 非左键 → 不拦截，交给浏览器用 href 在新标签打开 */
   if(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+
+  const wf = e.target.closest('[data-works-filter]');
+  if(wf){
+    worksFilter = wf.dataset.worksFilter;
+    render();
+    return;
+  }
+
   const t = e.target.closest('[data-go]');
   if(t){
     e.preventDefault();
     const p = t.dataset.go;
     const params = {};
     if(t.dataset.slug) params.slug = t.dataset.slug;
-    if(t.dataset.id) params.id = t.dataset.id;
-    if(t.dataset.cat) params.cat = t.dataset.cat;
+    if(t.dataset.id)   params.id   = t.dataset.id;
+    if(t.dataset.cat)  params.cat  = t.dataset.cat;
     go(p, params);
     return;
   }
-  const cp = e.target.closest('[data-copy]');
-  if(cp){
-    const pre = cp.closest('.code').querySelector('pre');
-    navigator.clipboard && navigator.clipboard.writeText(pre.innerText);
-    const old = cp.innerHTML;
-    cp.innerHTML = ic('check-sm','sm')+'已复制';
-    setTimeout(()=>cp.innerHTML = old, 1400);
-    return;
-  }
-  if(e.target.closest('#toggleSilent')){
-    NOW.silent = !NOW.silent; render(); return;
-  }
+
   if(e.target.closest('#burger')){ setDrawer(!document.body.classList.contains('drawer-open')); return; }
   if(e.target.id==='scrim') setDrawer(false);
 });
 
-/* ================= 搜索 ================= */
-const INDEX = [
-  ...(SRC === 'demo' ? NOTES : []).map(n=>({type:'note', t:n.title, d:n.topic+' · '+n.stage+' · '+n.tags.join(' '), go:'note', slug:n.slug, icon:'doc'})),
-  ...(SRC === 'demo' ? LABS : []).map(l=>({type:'lab', t:l.id+' '+l.title, d:'实验 · '+l.topic, go:'lab', id:l.id, icon:'flask'})),
-  ...STAGES.map(s=>({type:'路线', t:s.name, d:SRC === 'demo' ? '路线节点 · '+STAT[s.status] : '路线节点', go:'roadmap', icon:'map'})),
-  ...(SRC === 'real' ? REAL.branches : []).map(b=>({type:'主题', t:b.name, d:b.desc, go:'notes', cat:b.id, icon:'doc'})),
-  {type:'页面', t:'About · 关于本站', d:'门户', go:'about', icon:'info'},
-  {type:'页面', t:'Now · 现在在做什么', d:'门户', go:'now', icon:'target'},
-  {type:'页面', t:'Roadmap · 六阶段学习路线', d:'门户', go:'roadmap', icon:'map'},
-  {type:'页面', t:'Labs · 动手实验', d:'门户', go:'labs', icon:'flask'},
-  {type:'页面', t:'Notes · 笔记档案', d:'门户', go:'notes', icon:'doc'}
-];
-const GRP_ORDER = ['note','lab','主题','路线','页面'];
-const GRP_NAME = {note:'笔记', lab:'实验', '主题':'笔记主题', '路线':'路线节点', '页面':'页面'};
+/* ================= 全局 ⌘K 搜索 ================= */
+function getSearchIndex(){
+  const tools = (window.LiteKitTools && window.LiteKitTools.TOOLS) || [];
+  return [
+    ...tools.map(t => ({
+      type:'tool',
+      t:`${t.name} · ${t.cnName}`,
+      d:`${t.category} · ${t.tagline} · ${t.keywords || ''}`,
+      go:'tool',
+      id:t.id,
+      icon:t.icon
+    })),
+    ...PM_NOTES.map(n => ({
+      type:'note',
+      t:n.title,
+      d:`${n.topic} · ${n.tags.join(' ')} · ${n.summary}`,
+      go:'note',
+      slug:n.slug,
+      icon:'bulb'
+    })),
+    ...ROADMAP_STAGES.map(s => ({
+      type:'roadmap',
+      t:s.name,
+      d:s.goal,
+      go:'roadmap',
+      icon:'map'
+    })),
+    {type:'page', t:'作品集总览 · LiteKit Works', d:'浏览全部 4 款免登录在线效率工具', go:'works', icon:'layers'},
+    {type:'page', t:'Now · 近期更新日志', d:'查看版本里程碑与当前聚焦动态', go:'now', icon:'clock'},
+    {type:'page', t:'About · 关于本站与造物原则', d:'了解真痛点驱动与纯本地隐私安全设计', go:'about', icon:'info'}
+  ];
+}
+
+const GRP_ORDER = ['tool', 'note', 'roadmap', 'page'];
+const GRP_NAME = {tool:'在线效率工具（点开即用）', note:'产品设计复盘', roadmap:'造物演进阶段', page:'站点门户页面'};
 
 const ov = document.getElementById('overlay');
 const qEl = document.getElementById('q');
@@ -1528,10 +1261,11 @@ function closeSearch(){
   document.getElementById('searchBtn').focus();
 }
 function paintSearch(kw){
+  const all = getSearchIndex();
   const k = kw.trim().toLowerCase();
-  const hits = k ? INDEX.filter(i=>(i.t+' '+i.d).toLowerCase().includes(k)) : INDEX.slice(0,6);
+  const hits = k ? all.filter(i=>(i.t+' '+i.d).toLowerCase().includes(k)) : all.slice(0, 7);
   if(!hits.length){
-    ovList.innerHTML = `<div class="ov-none">${ic('search')}<div style="margin-top:8px">没有找到与「${escHtml(kw)}」匹配的结果。</div></div>`;
+    ovList.innerHTML = `<div class="ov-none">${ic('search')}<div style="margin-top:8px">没有找到与「${escHtml(kw)}」相关的工具或复盘。</div></div>`;
     return;
   }
   const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
@@ -1543,19 +1277,24 @@ function paintSearch(kw){
     const sub = hits.filter(h=>h.type===g);
     if(!sub.length) return;
     html += `<div class="ov-grp">${GRP_NAME[g]}</div>`;
-    html += sub.map(h=>`<button class="ov-item" data-go="${h.go}" ${h.slug?`data-slug="${h.slug}"`:''} ${h.id?`data-id="${h.id}"`:''} ${h.cat?`data-cat="${h.cat}"`:''}>
+    html += sub.map(h=>`<button type="button" class="ov-item" data-go="${h.go}" ${h.slug?`data-slug="${h.slug}"`:''} ${h.id?`data-id="${h.id}"`:''}>
       <span class="ti">${ic(h.icon,'sm')}</span>
       <span><span class="t">${mk(h.t)}</span><br><span class="d">${mk(h.d)}</span></span>
       ${ic('arrow-r','ic-arrow')}</button>`).join('');
   });
   ovList.innerHTML = html;
 }
+
 document.getElementById('searchBtn').addEventListener('click', openSearch);
 qEl.addEventListener('input', e=>paintSearch(e.target.value));
 document.addEventListener('keydown', e=>{
   if(e.key==='Escape'){
-    if(ov.classList.contains('show')) closeSearch();
-    else if(document.body.classList.contains('drawer-open')){
+    if(ov.classList.contains('show')){ closeSearch(); return; }
+    if(document.body.classList.contains('zen-ocean') && window.LiteKitTools){
+      window.LiteKitTools.exitZenMode();
+      return;
+    }
+    if(document.body.classList.contains('drawer-open')){
       setDrawer(false);
       burger.focus();
     }
@@ -1579,15 +1318,7 @@ document.addEventListener('keydown', e=>{
 });
 ov.addEventListener('click', e=>{ if(e.target===ov) closeSearch(); });
 
-/* ================= 启动 ================= */
-/* 首屏从 URL 恢复；无 hash 时补一个 #/（file:// 下 replaceState 可能抛错，忽略即可） */
-document.body.classList.toggle('demo', SRC === 'demo');
-document.getElementById('demoNotice').hidden = SRC !== 'demo';
-if(SRC === 'demo'){
-  const link = document.getElementById('demoLink');
-  link.href = './#/';
-  link.textContent = '返回学习档案';
-}
+/* ================= 启动渲染 ================= */
 try{ if(!location.hash) history.replaceState(null, '', '#/'); }catch(e){}
 applyRoute(parseHash(location.hash || '#/'), false);
 </script>
